@@ -1,12 +1,12 @@
 import requests
 
-from src.config import HH_CLIENT_ID, HH_CLIENT_SECRET
+from src.config import HH_CLIENT_ID, HH_CLIENT_SECRET, HH_AUTH_CODE
 
 
 class HHAuth:
 
-    def __init__(self, client_id: str, client_secret: str) -> None:
-        self.auth_code = self.primary_auth()
+    def __init__(self, auth_code: str, client_id: str, client_secret: str) -> None:
+        self.auth_code = auth_code
         self.client_id = client_id
         self.client_secret = client_secret
 
@@ -31,6 +31,7 @@ class HHAuth:
         return response.text
 
 hh = HHAuth(
+    auth_code=HH_AUTH_CODE,
     client_id=HH_CLIENT_ID,
     client_secret=HH_CLIENT_SECRET
 )
