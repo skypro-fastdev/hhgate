@@ -1,32 +1,26 @@
 import requests
-from pprint import pprint
+import asyncio
+import aiohttp
+import aiofiles
 
-from post_body_tmp import post_body
+from async_property import async_property
+
+from src.classes.post_body_tmp import post_body
 from src.config import HH_ACCESS_TOKEN
 
 
-class HHClient:
+class HHResumeClient:
 
-    def __init__(self, access_token: str):
+    def __init__(self, access_token: str) -> None:
         self.access_token = access_token
 
-    @property
-    def headers(self) -> dict[str, str]:
+    @async_property
+    async def headers(self) -> dict[str, str]:
         return {"Authorization": f"Bearer {self.access_token}"}
 
-    def load_photo(self) -> dict[str, str]:
-        url = "https://api.hh.ru/artifacts"
-        headers = self.headers
-
-        data = {'type': 'photo'}
-        files = {'file': open('../photo/test_pic_sparrow.jpg', 'rb')}
-
-        response = requests.post(url, headers=headers, data=data, files=files)
-        return response.json()
-
-    def get_resumes(self) -> str | None:
+    async def get_resumes(self) -> str | None:
         url = "https://api.hh.ru/resumes/mine"
-        headers = self.headers
+        headers = await self.headers
 
         try:
             response = requests.get(url, headers=headers)
@@ -37,9 +31,9 @@ class HHClient:
             print(f"Error: {e}")
             return None
 
-    def post_resume(self) -> str | None:
+    async def post_resume(self) -> str | None:
         url = 'https://api.hh.ru/resumes'
-        headers = self.headers
+        headers = await self.headers
 
         try:
             response = requests.post(
@@ -54,9 +48,4 @@ class HHClient:
             return None
 
 
-client = HHClient(access_token=HH_ACCESS_TOKEN)
-# new_res = client.post_resume()
-# pprint(new_res)
-# pprint(client.load_photo())
-# result = client.get_resumes()
-# print(result)
+client = HHResumeClient(access_token=HH_ACCESS_TOKEN)
