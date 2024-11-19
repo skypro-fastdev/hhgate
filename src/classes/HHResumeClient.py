@@ -1,12 +1,7 @@
-import requests
-import asyncio
 import aiohttp
-import aiofiles
-
 from async_property import async_property
 
 from src.classes.post_body_tmp import post_body
-from src.config import HH_ACCESS_TOKEN
 
 
 class HHResumeClient:
@@ -21,31 +16,24 @@ class HHResumeClient:
     async def get_resumes(self) -> str | None:
         url = "https://api.hh.ru/resumes/mine"
         headers = await self.headers
-
         try:
-            response = requests.get(url, headers=headers)
-            response.raise_for_status()
-            content = response.json()
-            return content
-        except requests.exceptions.RequestException as e:
-            print(f"Error: {e}")
-            return None
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, headers=headers) as response:
+                    response.raise_for_status()
+                    content = await response.json()
+                    return content
+        except Exception as e:
+            return f'Произошла ошибка\n {e}'
 
     async def post_resume(self) -> str | None:
         url = 'https://api.hh.ru/resumes'
         headers = await self.headers
 
         try:
-            response = requests.post(
-                url=url,
-                headers=headers,
-                json=post_body
-            )
-
-            return response.headers["Location"]
-        except requests.exceptions.RequestException as e:
-            print(f"Error: {e}")
-            return None
-
-
-client = HHResumeClient(access_token=HH_ACCESS_TOKEN)
+            async with aiohttp.ClientSession() as session:
+                async with session.post(url, headers=headers, json=post_body) as response:
+                    response.raise_for_status()
+                    content = await response.json()
+                    return content.headers['Location']
+        except Exception as e:
+            return f'Произошла ошибка\n {e}'

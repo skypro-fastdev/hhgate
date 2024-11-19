@@ -1,5 +1,4 @@
 import aiohttp
-import requests
 from async_property import async_property
 
 

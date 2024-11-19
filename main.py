@@ -10,4 +10,6 @@ if __name__ == '__main__':
     hh_res_client = HHResumeClient(access_token=HH_ACCESS_TOKEN)
     hh_art_client = HHArtifactsClient(access_token=HH_ACCESS_TOKEN)
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    asyncio.run(hh_art_client.load_photo())
+    # asyncio.run(hh_art_client.load_photo())
+    # asyncio.run(hh_res_client.get_resumes())
+    # asyncio.run(hh_res_client.post_resume())
