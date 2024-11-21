@@ -2,7 +2,7 @@ import json
 
 
 def search_areas(user_area: str) -> str:
-    with open('areas_ref.json', 'r', encoding='utf-8') as file:
+    with open('utils/areas_ref.json', 'r', encoding='utf-8') as file:
         areas_list = json.loads(file.read())
 
         # print(type(areas_list))

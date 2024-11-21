@@ -1,6 +1,6 @@
 import requests
 
-from src.config import HH_CLIENT_ID, HH_CLIENT_SECRET, HH_AUTH_CODE
+
 
 
 class HHAuth:
@@ -18,14 +18,10 @@ class HHAuth:
             'client_secret': self.client_secret,
             'code': self.auth_code,
         }
+        print(body)
 
         response = requests.post(url, data=body)
+        print(response.status_code, response.content)
 
         tokens = response.json()
-        print(tokens)
-
-    def primary_auth(self) -> str:
-        url = f"https://hh.ru/oauth/authorize?response_type=code&client_id={HH_CLIENT_ID}"
-
-        response = requests.get(url)
-        return response.text
+        return tokens
