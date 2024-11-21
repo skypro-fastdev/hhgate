@@ -29,11 +29,3 @@ class HHAuth:
 
         response = requests.get(url)
         return response.text
-
-hh = HHAuth(
-    auth_code=HH_AUTH_CODE,
-    client_id=HH_CLIENT_ID,
-    client_secret=HH_CLIENT_SECRET
-)
-
-hh.connect()

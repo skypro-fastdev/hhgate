@@ -1,15 +1,19 @@
-import asyncio
-import logging
-import sys
-
-from src.classes.HHArtifactsClient import HHArtifactsClient
+from fastapi import FastAPI
 from src.classes.HHResumeClient import HHResumeClient
 from src.config import HH_ACCESS_TOKEN
+from src.models.student import Student
 
-if __name__ == '__main__':
-    hh_res_client = HHResumeClient(access_token=HH_ACCESS_TOKEN)
-    hh_art_client = HHArtifactsClient(access_token=HH_ACCESS_TOKEN)
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    # asyncio.run(hh_art_client.load_photo())
-    # asyncio.run(hh_res_client.get_resumes())
-    # asyncio.run(hh_res_client.post_resume())
+app = FastAPI()
+hh_res_client = HHResumeClient(access_token=HH_ACCESS_TOKEN)
+
+
+@app.get("/resumes/")
+async def get_all_resumes():
+    response = await hh_res_client.get_resumes()
+    return response
+
+@app.post("/resume/")
+async def post_resume(student: Student):
+    student_dict = student.model_dump()
+    response = await hh_res_client.post_resume(student_dict)
+    return response
