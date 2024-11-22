@@ -68,7 +68,7 @@ async def load_photo(student_id: int, file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail='Something went wrong')
     finally:
         file.file.close()
-    return {"filename": filename}
+    return {"student_photo_url": filename}
 
 
 if __name__ == "__main__":
