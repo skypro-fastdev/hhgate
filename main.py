@@ -44,17 +44,11 @@ async def get_all_resumes():
     pass
 @app.post("/resume/")
 async def post_resume(student: Student):
+
     if student.hh_access_token is not None:
         hh_access_token = student.hh_access_token
     else:
-        try:
-            hh_access_token = HHAuth(
-                auth_code=student.hh_code,
-                client_id=HH_CLIENT_ID,
-                client_secret=HH_CLIENT_SECRET
-            ).connect()['access_token']
-        except Exception as e:
-            raise HTTPException(status_code=403, detail='Wrong HH code')
+        raise HTTPException(status_code=403, detail='Wrong HH code')
 
     hh_res_client = HHResumeClient(access_token=hh_access_token)
     student_dict = student.model_dump()
