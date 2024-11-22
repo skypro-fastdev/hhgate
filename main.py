@@ -4,6 +4,7 @@ import uvicorn
 
 from fastapi import FastAPI, UploadFile, File, HTTPException, Request
 from starlette.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.classes.HHAuth import HHAuth
 from src.classes.HHResumeClient import HHResumeClient
@@ -13,6 +14,13 @@ from src.models.student import Student
 app = FastAPI()
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 @app.post("/auth/")
 async def get_auth(request: Request):
