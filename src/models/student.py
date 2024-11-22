@@ -13,7 +13,7 @@ class Student(BaseModel):
     profession: str = Field(description='Профессия')
     profession_pretty: str = Field(description='Название профессии')
     about: str = Field(description='О себе')
-    skill_set: list[dict] = Field(description='Список навыков', default_factory=list)
+    skill_set: list[str] = Field(description='Список навыков', default_factory=list)
 
     student_mail: str = Field(description='Электронная почта')
     student_phone: str = Field(description='Номер телефона в международном формате, например 7955-555-5555')

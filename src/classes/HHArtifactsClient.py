@@ -18,6 +18,10 @@ class HHArtifactsClient:
     async def upload_and_wait_till_ready(self, path):
 
         photo_id = await self.upload_photo(path)
+
+        if photo_id is None:
+            raise HTTPException(status_code= 400, detail={"error": "Cant upload photo"})
+
         logger.info(f"Uploaded photo {photo_id}")
 
         for i in range(5):

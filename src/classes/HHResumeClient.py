@@ -35,9 +35,7 @@ class HHResumeClient:
             "birth_date": student_data['student_birth_date'],
             "first_name": student_data['student_first_name'],
             "last_name": student_data['student_last_name'],
-            "gender": {
-                "id": 'male',
-            },
+            "gender": { "id": student_data['student_gender'] },
             "area":
                 {
                     "id": search_areas(student_data['student_location']),
@@ -84,6 +82,22 @@ class HHResumeClient:
                     "id": "165"
                 }],
             "experience": [
+
+                {
+                    "area": {
+                        "id": "113"
+                    },
+                    "company": student_data['recent_job_organisation'],
+                    "company_id": None,
+                    "company_url": None,
+                    "position": student_data['recent_job_position'],
+                    "description": student_data['recent_job_experience'],
+                    "employer": None,
+                    "start": student_data['recent_job_from'],
+                    "end": student_data['recent_job_to'],
+
+                },
+
                 {
                     "area": {
                         "id": "113"
@@ -91,19 +105,17 @@ class HHResumeClient:
                     "company": student_data['previous_job_organisation'],
                     "company_id": None,
                     "company_url": None,
+                    "position": student_data['previous_job_position'],
                     "description": student_data['previous_job_experience'],
                     "employer": None,
-                    "end": student_data['recent_job_to'],
-                    # TODO check out id`s and req fields
-                    "industries": [],
-                    # TODO maybe industry not required
-                    "industry": {
-                        "id": "11",
-                        "name": "Информационные технологии"
-                    },
-                    "position": student_data['recent_job_position'],
-                    "start": student_data['recent_job_from']
-                }],
+
+                    "start": student_data['previous_job_from'],
+                    "end": student_data['previous_job_to'],
+
+                }
+
+
+            ],
             "education": {
                 "additional": None,
                 "attestation": None,
@@ -117,7 +129,7 @@ class HHResumeClient:
                         "id": None,
                         "name": student_data['education_organisation'],
                         "name_id": None,
-                        "organization": "Биотехнология",
+                        "organization": student_data.get('education_faculty'),
                         "organization_id": None,
                         "result": student_data['education_industry'],
                         "result_id": None,
@@ -125,19 +137,24 @@ class HHResumeClient:
                     }]
             },
             "skills": student_data['about'],
+
+            "skill_set": student_data['skill_set'],
+
             "contact": [
                 {
-                    "preferred": True,
+                    "preferred": False,
                     "type": {
                         "id": "email",
                         "name": "Эл. почта"
                     },
-                    "value": 'my-email@example.com'
+                    "value": student_data['student_mail'],
                 },
+
+
                 {
                     "comment": None,
                     "need_verification": False,
-                    "preferred": False,
+                    "preferred": True,
                     "type": {
                         "id": "cell",
                         "name": "Мобильный телефон"
@@ -152,8 +169,18 @@ class HHResumeClient:
                 }]
         }
 
+        # Если есть фото – добавляем фото
+
+        if student_data.get('hh_photo_id'):
+            post_body["photo"] = {
+                "id": student_data.get('hh_photo_id'),
+                "small": student_data.get('hh_photo_small'),
+                "medium": student_data.get('hh_photo_medium'),
+            }
+
+
         async with aiohttp.ClientSession() as session:
-            async with session.post(url, headers=headers, json=post_body) as response:
+            async with session.post(url, headers=headers, json=post_body, ssl=False) as response:
                 if response.status == 201:
                     return {"hh_id": response.headers.get("Location")}
                 elif response.status == 400:
