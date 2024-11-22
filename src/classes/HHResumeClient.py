@@ -35,7 +35,7 @@ class HHResumeClient:
             "birth_date": student_data['student_birth_date'],
             "first_name": student_data['student_first_name'],
             "last_name": student_data['student_last_name'],
-            "gender": { "id": student_data['student_gender'] },
+            # "gender": { "id": student_data['student_gender'] },
             "area":
                 {
                     "id": search_areas(student_data['student_location']),

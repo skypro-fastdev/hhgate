@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field, EmailStr, field_validator, ValidationErro
 
 class Student(BaseModel):
     student_id: int
-    student_gender: str = Field(description='Пол')
+    # student_gender: str = Field(description='Пол')
     student_first_name: str = Field(description='Имя')
     student_last_name: str = Field(description='Фамилия')
     student_birth_date: str = Field(description='Дата рождения в формате ГГГГ-ММ-ДД')
