@@ -55,7 +55,7 @@ class Student(BaseModel):
     # hh_vacancy_url: str = Field(description='URL вакансии')
     # hh_vacancy_id: str = Field(description='ID вакансии')
 
-    checklist: str = Field(description='Чеклист с проверкой')
+    # checklist: str = Field(description='Чеклист с проверкой')
 
     hh_access_token: str | None = Field(default=None)
 
