@@ -1,0 +1,64 @@
+{
+    "items": [
+        {
+            "id": "607",
+            "text": "Hypersonic Sql"
+        },
+        {
+            "id": "871",
+            "text": "MS SQL"
+        },
+        {
+            "id": "874",
+            "text": "MS SQL Server"
+        },
+        {
+            "id": "872",
+            "text": "Ms SQL 2000"
+        },
+        {
+            "id": "873",
+            "text": "Ms SQL 2005"
+        },
+        {
+            "id": "971",
+            "text": "Oracle Pl/SQL"
+        },
+        {
+            "id": "1252",
+            "text": "SQL"
+        },
+        {
+            "id": "1253",
+            "text": "SQL Navigator"
+        },
+        {
+            "id": "1254",
+            "text": "SQL Server"
+        },
+        {
+            "id": "1255",
+            "text": "SQL Server Express"
+        },
+        {
+            "id": "395453",
+            "text": "SQL Server Profiler"
+        },
+        {
+            "id": "22645623",
+            "text": "SQL-инъекция"
+        },
+        {
+            "id": "170859",
+            "text": "SQLAlchemy"
+        },
+        {
+            "id": "26255",
+            "text": "SQLite"
+        },
+        {
+            "id": "102041",
+            "text": "Transact-SQL"
+        }
+    ]
+}
