@@ -13,7 +13,7 @@ class Student(BaseModel):
     profession: str = Field(description='Профессия')
     profession_pretty: str = Field(description='Название профессии')
     about: str = Field(description='О себе')
-    skill_set: str = Field(description='Список навыков')
+    skill_set: str = Field(description='Список навыков', "default"="")
 
     student_mail: str = Field(description='Электронная почта')
     student_phone: str = Field(description='Номер телефона в международном формате, например 7955-555-5555')
@@ -27,8 +27,8 @@ class Student(BaseModel):
     recent_job_organisation: str = Field(description='Название')
     recent_job_position: str = Field(description='Должность')
     recent_job_industry: str = Field(description='Индустрия')
-    recent_job_from: str = Field(description='Даты работы')
-    recent_job_to: str = Field(description='Настройка к промпту')
+    recent_job_from: int = Field(description='Дата начала работы')
+    recent_job_to: int = Field(description='Дата завершения работы')
     recent_job_experience: str = Field(description='Достижения')
     recent_job_prompt: str = Field(description='Промпт')
 
@@ -36,8 +36,8 @@ class Student(BaseModel):
     previous_job_organisation: str = Field(description='Название')
     previous_job_position: str = Field(description='Должность')
     previous_job_industry: str = Field(description='Индустрия')
-    previous_job_from: str = Field(description='Даты работы')
-    previous_job_to: str = Field(description='Настройка к промпту')
+    previous_job_from: int = Field(description='Дата начала работы')
+    previous_job_to: int = Field(description='Дата завершения работы')
     previous_job_experience: str = Field(description='Достижения')
     previous_job_prompt: str = Field(description='Промпт')
 
@@ -45,9 +45,6 @@ class Student(BaseModel):
     education_from: int = Field(description='Год начала обучения')
     education_to: int = Field(description='Год конца обучения')
     education_industry: str = Field(description='Отрасль / Специальность')
-
-    vacancy_link: str = Field(description='Ссылка на вакансию')
-    cover: str = Field(description='Сопроводительное письмо')
 
     # photo: str = Field(description='Фото')
 
