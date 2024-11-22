@@ -50,10 +50,10 @@ async def post_resume(student: Student):
     return response
 
 @app.post("/photo/{student_id}")
-async def load_photo(file: UploadFile = File(...)):
+async def load_photo(student_id: int, file: UploadFile = File(...)):
     try:
         contents = file.file.read()
-        filename = f"uploads/" + str(uuid.uuid4()) + '.' + file.filename.split('.')[-1]
+        filename = f"uploads/" + str(student_id) + '.' + file.filename.split('.')[-1]
         with open(filename, 'wb') as f:
             f.write(contents)
     except Exception:
