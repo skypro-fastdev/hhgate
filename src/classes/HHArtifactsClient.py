@@ -1,5 +1,9 @@
+import asyncio
+
 import aiohttp
 from async_property import async_property
+from fastapi import HTTPException
+from loguru import logger
 
 
 class HHArtifactsClient:
@@ -11,19 +15,59 @@ class HHArtifactsClient:
     async def headers(self) -> dict[str, str]:
         return {"Authorization": f"Bearer {self.access_token}"}
 
-    async def load_photo(self) -> dict[str, str]:
+    async def upload_and_wait_till_ready(self, path):
+
+        photo_id = await self.upload_photo(path)
+        logger.info(f"Uploaded photo {photo_id}")
+
+        for i in range(5):
+            await asyncio.sleep(2)
+            photo_obj = await self.get_photo_by_id(photo_id)
+            state: str = photo_obj["state"]["id"]
+            logger.info(f"Fetchin photo {photo_id}: state: {state}")
+            if state == "ok":
+                return photo_obj
+
+    async def upload_photo(self, path) -> int:
+
         url = "https://api.hh.ru/artifacts"
         headers = await self.headers
-        req_data = {
-            'type': 'photo',
-            'file': open('src/photo/test_pic_sparrow.jpg', 'rb')
-        }
+
+        form_data = aiohttp.FormData()
+        form_data.add_field('type', 'photo')
+        form_data.add_field('file', open(path, 'rb'), filename=path)
 
         async with aiohttp.ClientSession() as session:
-            with aiohttp.MultipartWriter('form-data') as mp:
-                for k, v in req_data.items():
-                    part = mp.append(v)
-                    part.set_content_disposition('form-data', name=k)
-            async with session.post(url, headers=headers, data=mp) as response:
-                json_data = await response.json()
-                return json_data
+            async with session.post(url, headers=headers, data=form_data, ssl=False) as response:
+
+                logger.info(f"Sending {path} to url {url} Status {response.status}")
+
+                if response.status == 201:
+                    json_data = await response.json()
+                    return json_data["id"]
+
+                if response.status == 400:
+                    json_data = await response.json()
+                    raise HTTPException(status_code= 400, detail=json_data)
+
+
+    async def all_photos(self) -> list[dict[str, str]]:
+        url = "https://api.hh.ru/artifacts/photo"
+        headers = await self.headers
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers,  ssl=False) as response:
+
+                if response.status == 200:
+                    json_data = await response.json()
+                    return json_data.get("items")
+
+                if response.status == 400:
+                    raise HTTPException(response.status, await response.json())
+
+                raise HTTPException(response.status, await response.json())
+
+    async def get_photo_by_id(self, id: int) -> dict[str, str | dict]:
+        all_photos = await self.all_photos()
+        for photo in all_photos:
+            if photo["id"] == id:
+                return photo

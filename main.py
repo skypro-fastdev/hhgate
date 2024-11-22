@@ -1,11 +1,15 @@
 import os
 import uuid
+from typing import Annotated
+
 import uvicorn
 
 from fastapi import FastAPI, UploadFile, File, HTTPException, Request
+from fastapi.params import Form
 from starlette.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.classes.HHArtifactsClient import HHArtifactsClient
 from src.classes.HHAuth import HHAuth
 from src.classes.HHResumeClient import HHResumeClient
 from src.config import HH_CLIENT_ID, HH_CLIENT_SECRET
@@ -58,17 +62,26 @@ async def post_resume(student: Student):
     return response
 
 @app.post("/photo/{student_id}")
-async def load_photo(student_id: int, file: UploadFile = File(...)):
-    try:
-        contents = file.file.read()
-        filename = f"uploads/" + str(student_id) + '.' + file.filename.split('.')[-1]
-        with open(filename, 'wb') as f:
-            f.write(contents)
-    except Exception:
-        raise HTTPException(status_code=500, detail='Something went wrong')
-    finally:
-        file.file.close()
-    return {"student_photo_url": filename}
+async def load_photo_till_ready(student_id: int, hh_access_token: Annotated[str, Form()], file: UploadFile = File(...)):
+
+    contents = file.file.read()
+    filename = f"uploads/" + str(student_id) + '.' + file.filename.split('.')[-1]
+    with open(filename, 'wb') as f:
+        f.write(contents)
+
+    client = HHArtifactsClient(hh_access_token)
+    upload_result = await client.upload_and_wait_till_ready(filename)
+    return upload_result
+
+
+@app.get("/artifacts/")
+async def get_all_artifacts(request: Request):
+    request_data = await request.json()
+    hh_access_token = request_data.get("hh_access_token")
+
+    client = HHArtifactsClient(hh_access_token)
+    all_artifacts = await client.all_photos()
+    return all_artifacts
 
 
 if __name__ == "__main__":
