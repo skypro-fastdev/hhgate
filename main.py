@@ -14,7 +14,16 @@ app = FastAPI()
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 
-
+@app.post("/auth/")
+async def get_auth(request: Request):
+    request_data = await request.json()
+    hh_code = request_data["hh_code"]
+    hh_access_token = HHAuth(
+        auth_code=hh_code,
+        client_id=HH_CLIENT_ID,
+        client_secret=HH_CLIENT_SECRET
+    ).connect()['access_token']
+    return {"access_token": hh_access_token}
 
 @app.get("/resumes/")
 async def get_all_resumes():

@@ -1,6 +1,5 @@
 import requests
-
-
+from fastapi import HTTPException
 
 
 class HHAuth:
@@ -18,10 +17,10 @@ class HHAuth:
             'client_secret': self.client_secret,
             'code': self.auth_code,
         }
-        print(body)
 
         response = requests.post(url, data=body)
-        print(response.status_code, response.content)
-
+        if response.status_code in (403, 400):
+            error_details = response.json()
+            raise HTTPException(status_code=response.status_code, detail=error_details)
         tokens = response.json()
         return tokens
