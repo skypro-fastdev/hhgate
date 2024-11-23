@@ -45,6 +45,7 @@ class Student(BaseModel):
     education_from: str = Field(description='Год начала обучения')
     education_to: str = Field(description='Год конца обучения')
     education_industry: str = Field(description='Отрасль / Специальность')
+    education_level: str = Field(description='Уровень образования')
 
     # photo: str = Field(description='Фото')
 

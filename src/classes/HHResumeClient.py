@@ -32,90 +32,85 @@ class HHResumeClient:
         headers = self.headers
 
         post_body = {
-            "birth_date": student_data['student_birth_date'],
-            "first_name": student_data['student_first_name'],
-            "last_name": student_data['student_last_name'],
+            # "birth_date": student_data['student_birth_date'],
+            # "first_name": student_data['student_first_name'],
+            # "last_name": student_data['student_last_name'],
             # "gender": { "id": student_data['student_gender'] },
-            "area":
-                {
-                    "id": search_areas(student_data['student_location']),
-                },
-            "citizenship": [
-                {
-                    "id": "113"
-                }],
-            "work_ticket": [
-                {
-                    "id": "113"
-                }],
-            # TODO need relocation?
-            "relocation": {
-                "type":
-                    {
-                        "id": "no_relocation"
-                    }
-            },
-            # TODO need business_trip_readiness?
-            "business_trip_readiness":
-                {
-                    "id": "never"
-                },
-            "title": student_data['profession_pretty'],
-            # TODO need schedules?
-            "schedules": [
-                {
-                    "id": "fullDay",
-                    "name": "Полный день"
-                },
-                {
-                    "id": "remote",
-                    "name": "Удаленная работа"
-                }],
-            # TODO need travel_time?
-            "travel_time":
-                {
-                    "id": 'any'
-                },
-            # TODO professional_roles maybe not required
-            "professional_roles": [
-                {
-                    "id": "165"
-                }],
-            "experience": [
-
-                {
-                    "area": {
-                        "id": "113"
-                    },
-                    "company": student_data['recent_job_organisation'],
-                    "company_id": None,
-                    "company_url": None,
-                    "position": student_data['recent_job_position'],
-                    "description": student_data['recent_job_experience'],
-                    "employer": None,
-                    "start": student_data['recent_job_from'],
-                    "end": student_data['recent_job_to'],
-
-                },
-
-                {
-                    "area": {
-                        "id": "113"
-                    },
-                    "company": student_data['previous_job_organisation'],
-                    "company_id": None,
-                    "company_url": None,
-                    "position": student_data['previous_job_position'],
-                    "description": student_data['previous_job_experience'],
-                    "employer": None,
-
-                    "start": student_data['previous_job_from'],
-                    "end": student_data['previous_job_to'],
-
-                }
+            # "area":
+            #     {
+            #         "id": search_areas(student_data['student_location']),
+            #     },
+            # "citizenship": [
+            #     {
+            #         "id": "113"
+            #     }],
+            # "work_ticket": [
+            #     {
+            #         "id": "113"
+            #     }],
+            # "relocation": {
+            #     "type":
+            #         {
+            #             "id": "no_relocation"
+            #         }
+            # },
+            # "business_trip_readiness":
+            #     {
+            #         "id": "never"
+            #     },
+            # "title": student_data['profession_pretty'],
+            # "schedules": [
+            #     {
+            #         "id": "fullDay",
+            #         "name": "Полный день"
+            #     },
+            #     {
+            #         "id": "remote",
+            #         "name": "Удаленная работа"
+            #     }],
+            # "travel_time":
+            #     {
+            #         "id": 'any'
+            #     },
+            # "professional_roles": [
+            #     {
+            #         "id": "165"
+            #     }],
+            # "experience": [
+            #
+            #     {
+            #         "area": {
+            #             "id": "113"
+            #         },
+            #         "company": student_data['recent_job_organisation'],
+            #         "company_id": None,
+            #         "company_url": None,
+            #         "position": student_data['recent_job_position'],
+            #         "description": student_data['recent_job_experience'],
+            #         "employer": None,
+            #         "start": student_data['recent_job_from'],
+            #         "end": student_data['recent_job_to'],
+            #
+            #     },
+            #
+            #     {
+            #         "area": {
+            #             "id": "113"
+            #         },
+            #         "company": student_data['previous_job_organisation'],
+            #         "company_id": None,
+            #         "company_url": None,
+            #         "position": student_data['previous_job_position'],
+            #         "description": student_data['previous_job_experience'],
+            #         "employer": None,
+            #
+            #         "start": student_data['previous_job_from'],
+            #         "end": student_data['previous_job_to'],
+            #
+            #     }
 
 
-            ],
+            # ],
             "education": {
                 "additional": None,
                 "attestation": None,
@@ -136,37 +131,37 @@ class HHResumeClient:
                         "year": student_data['education_to']
                     }]
             },
-            "skills": student_data['about'],
+            # "skills": student_data['about'],
 
-            "skill_set": student_data['skill_set'],
+            # "skill_set": student_data['skill_set'],
 
-            "contact": [
-                {
-                    "preferred": False,
-                    "type": {
-                        "id": "email",
-                        "name": "Эл. почта"
-                    },
-                    "value": student_data['student_mail'],
-                },
-
-
-                {
-                    "comment": None,
-                    "need_verification": False,
-                    "preferred": True,
-                    "type": {
-                        "id": "cell",
-                        "name": "Мобильный телефон"
-                    },
-                    "value": {
-                        "city": "904",
-                        "country": "7",
-                        "formatted": "7-000-000-0000",
-                        "number": "8853522"
-                    },
-                    "verified": False
-                }]
+        #     "contact": [
+        #         {
+        #             "preferred": False,
+        #             "type": {
+        #                 "id": "email",
+        #                 "name": "Эл. почта"
+        #             },
+        #             "value": student_data['student_mail'],
+        #         },
+        #
+        #
+        #         {
+        #             "comment": None,
+        #             "need_verification": False,
+        #             "preferred": True,
+        #             "type": {
+        #                 "id": "cell",
+        #                 "name": "Мобильный телефон"
+        #             },
+        #             "value": {
+        #                 "city": "904",
+        #                 "country": "7",
+        #                 "formatted": "7-000-000-0000",
+        #                 "number": "8853522"
+        #             },
+        #             "verified": False
+        #         }]
         }
 
         # Если есть фото – добавляем фото
