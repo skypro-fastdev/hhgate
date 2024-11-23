@@ -69,9 +69,9 @@ class HHResumeBuilder:
         self.body_fields["travel_time"] = travel_time
 
         for p_role in professional_roles:
-            self.body_fields["professional_roles"].append(p_role)
+            self.body_fields["professional_roles"].append({"id":p_role})
 
-    def add_education(self, education: dict[str, str]) -> None:
+    def add_education(self, education: dict[str, str | int]) -> None:
         """
         Добавляет поля:
             - Информацию об образовании
@@ -92,7 +92,7 @@ class HHResumeBuilder:
                 "primary": None
             }
 
-        elif education["level"].lower() in higher_education_list:
+        elif education["education_level"].lower() in higher_education_list:
             self.body_fields["education"] = {
                 "additional": None,
                 "attestation": None,
@@ -103,7 +103,7 @@ class HHResumeBuilder:
                         "id": None,
                         "name": education['education_organisation'],
                         "name_id": None,
-                        "organization": education.get('education_faculty'),
+                        "organization": education['education_industry'],
                         "organization_id": None,
                         "result": education['education_industry'],
                         "result_id": None,
@@ -131,7 +131,7 @@ class HHResumeBuilder:
                 "end": experience['job_to'],
             })
 
-    def add_contact(self, contact: str) -> None:
+    def add_contact(self, contact: dict[str, str]) -> None:
         """
         Добавляет поля:
             - Контакты телефон/эл.почта
@@ -144,7 +144,7 @@ class HHResumeBuilder:
                         "id": "email",
                         "name": "Эл. почта"
                     },
-                    "value": contact
+                    "value": contact["student_mail"]
                 })
         elif "student_phone" in contact:
             self.body_fields["contact"].append(
@@ -157,10 +157,7 @@ class HHResumeBuilder:
                         "name": "Мобильный телефон"
                     },
                     "value": {
-                        "city": None,
-                        "country": None,
-                        "formatted": contact,
-                        "number": None
+                        "formatted": contact["student_phone"],
                     },
                     "verified": False
                 })
@@ -185,7 +182,7 @@ class HHResumeBuilder:
         Добавляет поля:
             - Фотография профиля
         """
-        for k, v in photo:
+        for k, v in photo.items():
             self.body_fields["photo"][k] = v
 
     def set_location(self,
@@ -193,7 +190,7 @@ class HHResumeBuilder:
                      citizenship: list[dict[str, str]] | None=None,
                      work_ticket: list[dict[str, str]] | None=None,
                      relocation: dict[str, dict[str, str]] | None=None,
-                     business_trip_readiness: list[dict[str, str]] | None=None) -> None:
+                     business_trip_readiness: dict[str, str] | None=None) -> None:
         """
         Добавляет поля:
             - Город проживания
@@ -209,7 +206,7 @@ class HHResumeBuilder:
         if relocation is None:
             relocation = {"type": {"id": "no_relocation"}}
         if business_trip_readiness is None:
-            business_trip_readiness = [{"id": "never"}]
+            business_trip_readiness = {"id": "never"}
 
         self.body_fields["area"] = {"id": search_areas(area)}
         self.body_fields["citizenship"] = citizenship

@@ -43,7 +43,7 @@ class HHResumeClient:
             'education_level': student_data['education_level'],
             'education_organisation': student_data['education_organisation'],
             'education_to': student_data['education_to'],
-            'education_faculty': student_data['education_faculty'],
+            'education_faculty': student_data['education_industry'],
             'education_industry': student_data['education_industry']
         })
         if student_data['previous_job_position']:
@@ -65,9 +65,14 @@ class HHResumeClient:
                 'job_to': student_data['recent_job_to']
             })
         if student_data['student_mail']:
-            resume_builder.add_contact(contact=student_data['student_mail'])
+            resume_builder.add_contact(contact=
+            {
+                'student_mail': student_data['student_mail']
+            })
         if student_data['student_phone']:
-            resume_builder.add_contact(contact=student_data['student_phone'])
+            resume_builder.add_contact(contact={
+                'student_phone': student_data['student_phone']
+            })
         resume_builder.add_skill(skills_list=student_data['skill_set'])
         resume_builder.set_about_info(about=student_data['about'])
         if student_data.get('hh_photo_id'):
@@ -88,6 +93,8 @@ class HHResumeClient:
         )
 
         post_body = resume_builder.build()
+
+        pprint(post_body)
 
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers, json=post_body, ssl=False) as response:
