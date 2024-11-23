@@ -1,14 +1,20 @@
+from typing import Any
+
 from utils.search_areas_service import search_areas
 from utils.search_education_level_service import search_education_level
 
 
 class HHResumeBuilder:
+    """
+    Класс Строитель тела POST запроса для HHResumeClient
+    """
+
     def __init__(self):
         self.body_fields = {
             "birth_date": None,
             "first_name": None,
             "last_name": None,
-            # "gender": {},
+            "gender": {},
             "area": {},
             "citizenship": [],
             "work_ticket": [],
@@ -26,11 +32,25 @@ class HHResumeBuilder:
             "contact": []
         }
 
-    def build(self):
+    def build(self) -> dict[str, Any]:
+        """
+        Метод сборки всех полей, возвращает готовый словарь со всеми полями
+        """
         inst = self.body_fields
         return inst
 
-    def set_profession(self, title, professional_roles, schedules=None, travel_time=None):
+    def set_profession(self,
+                       title: str,
+                       professional_roles: list[dict[str, str]] | None,
+                       schedules: list[dict[str, str]] | None=None,
+                       travel_time: dict[str, str] | None=None) -> None:
+        """
+        Добавляет поля:
+            - Название желаемой профессии
+            - Желаемую профессиональную роль
+            - Желаемый график работы
+            - Желаемое время в пути
+        """
         if schedules is None:
             schedules = [
                 {
@@ -47,13 +67,19 @@ class HHResumeBuilder:
         self.body_fields["title"] = title
         self.body_fields["schedules"] = schedules
         self.body_fields["travel_time"] = travel_time
+
         for p_role in professional_roles:
             self.body_fields["professional_roles"].append(p_role)
 
-    def add_education(self, education):
+    def add_education(self, education: dict[str, str]) -> None:
+        """
+        Добавляет поля:
+            - Информацию об образовании
+        """
         secondary_education_list = ["secondary", "special_secondary"]
         higher_education_list = ["unfinished_higher", "higher", "bachelor", "master", "candidate", "doctor"]
-        if education["level"].lower() in secondary_education_list:
+
+        if education["education_level"].lower() in secondary_education_list:
             self.body_fields["education"] = {
                 "additional": None,
                 "attestation": None,
@@ -65,6 +91,7 @@ class HHResumeBuilder:
                 "level": search_education_level(education["education_level"]),
                 "primary": None
             }
+
         elif education["level"].lower() in higher_education_list:
             self.body_fields["education"] = {
                 "additional": None,
@@ -84,77 +111,97 @@ class HHResumeBuilder:
                     }]
             }
 
-    def add_experience(self, recent_job, previous_job):
+    def add_experience(self, experience: dict[str, str]) -> None:
+        """
+        Добавляет поля:
+            - Информацию о работе прошлой/настоящей
+        """
         self.body_fields["experience"].append(
             {
                 "area": {
                     "id": "113"
                 },
-                "company": previous_job['recent_job_organisation'],
+                "company": experience['organisation'],
                 "company_id": None,
                 "company_url": None,
-                "position": previous_job['recent_job_position'],
-                "description": previous_job['recent_job_experience'],
+                "position": experience['position'],
+                "description": experience['job_experience'],
                 "employer": None,
-                "start": previous_job['recent_job_from'],
-                "end": previous_job['recent_job_to'],
-            })
-        self.body_fields["experience"].append(
-            {
-                "area": {
-                    "id": "113"
-                },
-                "company": recent_job['recent_job_organisation'],
-                "company_id": None,
-                "company_url": None,
-                "position": recent_job['recent_job_position'],
-                "description": recent_job['recent_job_experience'],
-                "employer": None,
-                "start": recent_job['recent_job_from'],
-                "end": recent_job['recent_job_to'],
+                "start": experience['job_from'],
+                "end": experience['job_to'],
             })
 
-    def add_contact(self, phone_number, email):
-        self.body_fields["contact"].append(
-            {
-                "preferred": False,
-                "type": {
-                    "id": "email",
-                    "name": "Эл. почта"
-                },
-                "value": email
-            })
+    def add_contact(self, contact: str) -> None:
+        """
+        Добавляет поля:
+            - Контакты телефон/эл.почта
+        """
+        if "student_mail" in contact:
+            self.body_fields["contact"].append(
+                {
+                    "preferred": False,
+                    "type": {
+                        "id": "email",
+                        "name": "Эл. почта"
+                    },
+                    "value": contact
+                })
+        elif "student_phone" in contact:
+            self.body_fields["contact"].append(
+                {
+                    "comment": None,
+                    "need_verification": False,
+                    "preferred": True,
+                    "type": {
+                        "id": "cell",
+                        "name": "Мобильный телефон"
+                    },
+                    "value": {
+                        "city": None,
+                        "country": None,
+                        "formatted": contact,
+                        "number": None
+                    },
+                    "verified": False
+                })
 
-        self.body_fields["contact"].append(
-            {
-                "comment": None,
-                "need_verification": False,
-                "preferred": True,
-                "type": {
-                    "id": "cell",
-                    "name": "Мобильный телефон"
-                },
-                "value": {
-                    "city": None,
-                    "country": None,
-                    "formatted": phone_number,
-                    "number": None
-                },
-                "verified": False
-            })
-
-    def add_skill(self, skills_list):
+    def add_skill(self, skills_list: list[str]) -> None:
+        """
+        Добавляет поля:
+            - Список навыков
+        """
         for skill in skills_list:
             self.body_fields["skill_set"].append(skill)
 
-    def set_about_info(self, about):
+    def set_about_info(self, about: str) -> None:
+        """
+        Добавляет поля:
+            - О себе. Достижения, успехи
+        """
         self.body_fields["skills"] = about
 
-    def add_photo(self, photo):
+    def add_photo(self, photo:dict[str, str]) -> None:
+        """
+        Добавляет поля:
+            - Фотография профиля
+        """
         for k, v in photo:
             self.body_fields["photo"][k] = v
 
-    def set_location(self, area, citizenship=None, work_ticket=None, relocation=None, business_trip_readiness=None):
+    def set_location(self,
+                     area: str,
+                     citizenship: list[dict[str, str]] | None=None,
+                     work_ticket: list[dict[str, str]] | None=None,
+                     relocation: dict[str, dict[str, str]] | None=None,
+                     business_trip_readiness: list[dict[str, str]] | None=None) -> None:
+        """
+        Добавляет поля:
+            - Город проживания
+            - Гражданство
+            - Разрешение на работу
+            - Возможность релокации
+            - Готовность к командировкам
+        """
         if citizenship is None:
             citizenship = [{"id": "113"}]
         if work_ticket is None:
@@ -170,7 +217,15 @@ class HHResumeBuilder:
         self.body_fields["relocation"] = relocation
         self.body_fields["business_trip_readiness"] = business_trip_readiness
 
-    def set_personal_data(self, birth_date, first_name, last_name):
+    def set_personal_data(self, birth_date:str, first_name:str, last_name:str, gender:str) -> None:
+        """
+        Добавляет поля:
+            - Дата рождения
+            - Имя
+            - Фамилия
+            - Пол
+        """
         self.body_fields["birth_date"] = birth_date
         self.body_fields["first_name"] = first_name
         self.body_fields["last_name"] = last_name
+        self.body_fields["gender"] = {"id": gender}

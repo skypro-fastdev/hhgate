@@ -3,6 +3,8 @@ from typing import Any
 import aiohttp
 
 from fastapi import HTTPException
+
+from src.classes.HHResumeBuilder import HHResumeBuilder
 from utils.search_areas_service import search_areas
 
 
@@ -31,148 +33,61 @@ class HHResumeClient:
         url = 'https://api.hh.ru/resumes'
         headers = self.headers
 
-        post_body = {
-            # "birth_date": student_data['student_birth_date'],
-            # "first_name": student_data['student_first_name'],
-            # "last_name": student_data['student_last_name'],
-            # "gender": { "id": student_data['student_gender'] },
-            # "area":
-            #     {
-            #         "id": search_areas(student_data['student_location']),
-            #     },
-            # "citizenship": [
-            #     {
-            #         "id": "113"
-            #     }],
-            # "work_ticket": [
-            #     {
-            #         "id": "113"
-            #     }],
-            # "relocation": {
-            #     "type":
-            #         {
-            #             "id": "no_relocation"
-            #         }
-            # },
-            # "business_trip_readiness":
-            #     {
-            #         "id": "never"
-            #     },
-            # "title": student_data['profession_pretty'],
-            # "schedules": [
-            #     {
-            #         "id": "fullDay",
-            #         "name": "Полный день"
-            #     },
-            #     {
-            #         "id": "remote",
-            #         "name": "Удаленная работа"
-            #     }],
-            # "travel_time":
-            #     {
-            #         "id": 'any'
-            #     },
-            # "professional_roles": [
-            #     {
-            #         "id": "165"
-            #     }],
-            # "experience": [
-            #
-            #     {
-            #         "area": {
-            #             "id": "113"
-            #         },
-            #         "company": student_data['recent_job_organisation'],
-            #         "company_id": None,
-            #         "company_url": None,
-            #         "position": student_data['recent_job_position'],
-            #         "description": student_data['recent_job_experience'],
-            #         "employer": None,
-            #         "start": student_data['recent_job_from'],
-            #         "end": student_data['recent_job_to'],
-            #
-            #     },
-            #
-            #     {
-            #         "area": {
-            #             "id": "113"
-            #         },
-            #         "company": student_data['previous_job_organisation'],
-            #         "company_id": None,
-            #         "company_url": None,
-            #         "position": student_data['previous_job_position'],
-            #         "description": student_data['previous_job_experience'],
-            #         "employer": None,
-            #
-            #         "start": student_data['previous_job_from'],
-            #         "end": student_data['previous_job_to'],
-            #
-            #     }
-
-
-            # ],
-            "education": {
-                "additional": None,
-                "attestation": None,
-                "elementary": None,
-                "level": {
-                    "id": "higher",
-                    "name": "Высшее"
-                },
-                "primary": [
-                    {
-                        "id": None,
-                        "name": student_data['education_organisation'],
-                        "name_id": None,
-                        "organization": student_data.get('education_faculty'),
-                        "organization_id": None,
-                        "result": student_data['education_industry'],
-                        "result_id": None,
-                        "year": student_data['education_to']
-                    }]
-            },
-            # "skills": student_data['about'],
-
-            # "skill_set": student_data['skill_set'],
-
-        #     "contact": [
-        #         {
-        #             "preferred": False,
-        #             "type": {
-        #                 "id": "email",
-        #                 "name": "Эл. почта"
-        #             },
-        #             "value": student_data['student_mail'],
-        #         },
-        #
-        #
-        #         {
-        #             "comment": None,
-        #             "need_verification": False,
-        #             "preferred": True,
-        #             "type": {
-        #                 "id": "cell",
-        #                 "name": "Мобильный телефон"
-        #             },
-        #             "value": {
-        #                 "city": "904",
-        #                 "country": "7",
-        #                 "formatted": "7-000-000-0000",
-        #                 "number": "8853522"
-        #             },
-        #             "verified": False
-        #         }]
-        }
-
-        # Если есть фото – добавляем фото
-
+        resume_builder = HHResumeBuilder()
+        resume_builder.set_profession(
+            title=student_data['profession_pretty'],
+            professional_roles=student_data['professional_roles']
+        )
+        resume_builder.add_education(education=
+        {
+            'education_level': student_data['education_level'],
+            'education_organisation': student_data['education_organisation'],
+            'education_to': student_data['education_to'],
+            'education_faculty': student_data['education_faculty'],
+            'education_industry': student_data['education_industry']
+        })
+        if student_data['previous_job_position']:
+            resume_builder.add_experience(experience=
+            {
+                'organisation': student_data['previous_job_organisation'],
+                'position': student_data['previous_job_position'],
+                'job_experience': student_data['previous_job_experience'],
+                'job_from': student_data['previous_job_from'],
+                'job_to': student_data['previous_job_to']
+            })
+        if student_data['recent_job_position']:
+            resume_builder.add_experience(experience=
+            {
+                'organisation': student_data['recent_job_organisation'],
+                'position': student_data['recent_job_position'],
+                'job_experience': student_data['recent_job_experience'],
+                'job_from': student_data['recent_job_from'],
+                'job_to': student_data['recent_job_to']
+            })
+        if student_data['student_mail']:
+            resume_builder.add_contact(contact=student_data['student_mail'])
+        if student_data['student_phone']:
+            resume_builder.add_contact(contact=student_data['student_phone'])
+        resume_builder.add_skill(skills_list=student_data['skill_set'])
+        resume_builder.set_about_info(about=student_data['about'])
         if student_data.get('hh_photo_id'):
-            post_body["photo"] = {
+            resume_builder.add_photo(photo=
+            {
                 "id": student_data.get('hh_photo_id'),
                 "small": student_data.get('hh_photo_small'),
                 "medium": student_data.get('hh_photo_medium'),
-            }
+            })
+        resume_builder.set_location(
+            area=student_data['student_location']
+        )
+        resume_builder.set_personal_data(
+            birth_date=student_data['student_birth_date'],
+            first_name=student_data['student_first_name'],
+            last_name=student_data['student_last_name'],
+            gender=student_data['student_gender']
+        )
 
+        post_body = resume_builder.build()
 
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers, json=post_body, ssl=False) as response:
