@@ -43,7 +43,7 @@ class HHResumeClient:
             'education_level': student_data['education_level'],
             'education_organisation': student_data['education_organisation'],
             'education_to': student_data['education_to'],
-            'education_faculty': student_data['education_industry'],
+            'education_faculty': student_data['education_faculty'],
             'education_industry': student_data['education_industry']
         })
         if student_data['previous_job_position']:
@@ -91,10 +91,9 @@ class HHResumeClient:
             last_name=student_data['student_last_name'],
             gender=student_data['student_gender']
         )
+        resume_builder.add_languages(student_data["student_english_level"])
 
         post_body = resume_builder.build()
-
-        pprint(post_body)
 
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers, json=post_body, ssl=False) as response:

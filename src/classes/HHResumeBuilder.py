@@ -2,6 +2,7 @@ from typing import Any
 
 from utils.search_areas_service import search_areas
 from utils.search_education_level_service import search_education_level
+from utils.search_language_level_service import search_language_level
 
 
 class HHResumeBuilder:
@@ -29,7 +30,8 @@ class HHResumeBuilder:
             "education": {},
             "skills": None,
             "skill_set": [],
-            "contact": []
+            "contact": [],
+            "language": []
         }
 
     def build(self) -> dict[str, Any]:
@@ -105,7 +107,7 @@ class HHResumeBuilder:
                         "name_id": None,
                         "organization": education['education_industry'],
                         "organization_id": None,
-                        "result": education['education_industry'],
+                        "result": education['education_faculty'],
                         "result_id": None,
                         "year": education['education_to']
                     }]
@@ -226,3 +228,28 @@ class HHResumeBuilder:
         self.body_fields["first_name"] = first_name
         self.body_fields["last_name"] = last_name
         self.body_fields["gender"] = {"id": gender}
+
+    def add_languages(self, eng_level: str, rus_level: str | None=None) -> None:
+        """
+        Добавляет поля:
+            - Владение языками
+        """
+        if rus_level is None:
+            self.body_fields["language"].append(
+            {
+                "id": "rus",
+                "name": "Русский",
+                "level":
+                    {
+                        "id": "l1",
+                        "name": "Родной"
+                    }
+            }
+        )
+        self.body_fields["language"].append(
+            {
+                "id": "eng",
+                "name": "Английский",
+                "level": search_language_level(eng_level)
+            }
+        )
