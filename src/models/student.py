@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field, EmailStr, field_validator, ValidationErro
 
 class Student(BaseModel):
     student_id: int
-    # student_gender: str = Field(description='Пол')
+    student_gender: str = Field(description='Пол')
     student_first_name: str = Field(description='Имя')
     student_last_name: str = Field(description='Фамилия')
     student_birth_date: str = Field(description='Дата рождения в формате ГГГГ-ММ-ДД')
@@ -12,6 +12,7 @@ class Student(BaseModel):
 
     profession: str = Field(description='Профессия')
     profession_pretty: str = Field(description='Название профессии')
+    professional_roles: list[str] = Field(description='Профессиональные роли')
     about: str = Field(description='О себе')
     skill_set: list[str] = Field(description='Список навыков', default_factory=list)
 
@@ -45,13 +46,15 @@ class Student(BaseModel):
     education_from: str = Field(description='Год начала обучения')
     education_to: str = Field(description='Год конца обучения')
     education_industry: str = Field(description='Отрасль / Специальность')
+    education_level: str = Field(description='Уровень образования')
 
     # photo: str = Field(description='Фото')
 
     hh_id: str = Field(description='id пользователя на HH')
     hh_code: str = Field(description='Токен HH')
-    hh_photo_id: str = Field(description='ID фото на HH')
     hh_portfolio_id: str = Field(description='ID портфолио на HH')
+    hh_photo_id: str | None = Field(description='ID фото на HH', default=None)
+    education_faculty: str = Field(description='Факультет', default=None)
     # hh_vacancy_url: str = Field(description='URL вакансии')
     # hh_vacancy_id: str = Field(description='ID вакансии')
 
