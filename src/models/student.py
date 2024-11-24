@@ -50,7 +50,7 @@ class Student(BaseModel):
 
     # photo: str = Field(description='Фото')
 
-    hh_id: str = Field(description='id пользователя на HH')
+    # hh_id: str = Field(description='id пользователя на HH')
     hh_code: str = Field(description='Токен HH')
     hh_portfolio_id: str = Field(description='ID портфолио на HH')
     hh_photo_id: str | None = Field(description='ID фото на HH', default=None)
