@@ -48,17 +48,12 @@ class Student(BaseModel):
     education_industry: str = Field(description='Отрасль / Специальность')
     education_level: str = Field(description='Уровень образования')
 
-    # photo: str = Field(description='Фото')
-
-    # hh_id: str = Field(description='id пользователя на HH')
     hh_code: str = Field(description='Токен HH')
     hh_portfolio_id: str = Field(description='ID портфолио на HH')
     hh_photo_id: str | None = Field(description='ID фото на HH', default=None)
     education_faculty: str = Field(description='Факультет', default=None)
-    # hh_vacancy_url: str = Field(description='URL вакансии')
-    # hh_vacancy_id: str = Field(description='ID вакансии')
 
-    # checklist: str = Field(description='Чеклист с проверкой')
+    legend_on: bool = Field(description='Включена ли легенда')
 
     hh_access_token: str | None = Field(default=None)
 
