@@ -1,5 +1,3 @@
-from audioop import error
-
 import aiohttp
 from typing import Any
 from fastapi import HTTPException
@@ -102,5 +100,13 @@ class HHResumeClient:
                     errors_description = {'errors': []}
                     error_details = (await response.json())
                     for items in error_details['errors']:
-                        errors_description['errors'].append(' '.join([items['value'], items['description']]))
+                        errors_description['errors'].append(' '.join(['Ошибка,', items['value'], items['description']]))
                     raise HTTPException(status_code=400, detail=errors_description)
+                elif response.status == 403:
+                    raise HTTPException(status_code=403, detail={'error': 'Доступ запрещен'})
+                elif response.status == 408:
+                    raise HTTPException(status_code=408, detail={'error': 'Ошибка, долгое ожидание запроса'})
+                elif response.status == 504:
+                    raise HTTPException(status_code=504, detail={'error': 'Ошибка, сервер не отвечает'})
+                elif response.status == 500:
+                    raise HTTPException(status_code=500, detail={'error': 'Сервер устал или у нас что то сломалось'})
