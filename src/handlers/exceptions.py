@@ -6,6 +6,10 @@ from starlette.responses import JSONResponse
 
 
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """
+    Кастомный обработчик ошибки RequestValidationError.
+    Срабатывает при передаче некорректного типа данных в поля моделей.
+    """
     error_messages = []
     for error in exc.errors():
         field = error["loc"][-1]
@@ -21,6 +25,11 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 
 async def custom_http_exception_handler(request: Request, exc: HTTPException):
+    """
+    Кастомный обработчик ошибок HTTPExceptions.
+    Взаимодействует с ошибками HTTPExceptions из словаря.
+    Отдает статус код и детали необработанных ошибок.
+    """
     errors_dict = {
         400: exc.detail,
         403: "Доступ запрещен",
@@ -31,3 +40,5 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
     for status_code, message in errors_dict.items():
         if status_code == exc.status_code:
             return JSONResponse(status_code=status_code, content={"error": message})
+        else:
+            return JSONResponse(status_code=exc.status_code, content=exc.detail)
