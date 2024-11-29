@@ -40,5 +40,5 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
     for status_code, message in errors_dict.items():
         if status_code == exc.status_code:
             return JSONResponse(status_code=status_code, content={"error": message})
-        else:
-            return JSONResponse(status_code=exc.status_code, content=exc.detail)
+
+    return JSONResponse(status_code=exc.status_code, content=exc.detail)
