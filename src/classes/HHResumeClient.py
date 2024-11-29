@@ -94,19 +94,14 @@ class HHResumeClient:
 
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers, json=post_body, ssl=False) as response:
+                errors_list = [403, 408, 504, 500]
                 if response.status == 201:
                     return {'hh_id': response.headers.get('Location')}
                 elif response.status == 400:
-                    errors_description = {'errors': []}
+                    errors_description = []
                     error_details = (await response.json())
                     for items in error_details['errors']:
-                        errors_description['errors'].append(' '.join(['Ошибка,', items['value'], items['description']]))
+                        errors_description.append(' '.join(['Ошибка,', items['value'], items['description']]))
                     raise HTTPException(status_code=400, detail=errors_description)
-                elif response.status == 403:
-                    raise HTTPException(status_code=403, detail={'error': 'Доступ запрещен'})
-                elif response.status == 408:
-                    raise HTTPException(status_code=408, detail={'error': 'Ошибка, долгое ожидание запроса'})
-                elif response.status == 504:
-                    raise HTTPException(status_code=504, detail={'error': 'Ошибка, сервер не отвечает'})
-                elif response.status == 500:
-                    raise HTTPException(status_code=500, detail={'error': 'Сервер устал или у нас что то сломалось'})
+                elif response.status in errors_list:
+                    raise HTTPException(status_code=response.status)
