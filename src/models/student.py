@@ -1,5 +1,4 @@
-from datetime import date
-from pydantic import BaseModel, Field, EmailStr, field_validator, ValidationError
+from pydantic import BaseModel, Field
 
 
 class Student(BaseModel):

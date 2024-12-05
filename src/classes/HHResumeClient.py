@@ -1,11 +1,8 @@
-from pprint import pprint
-from typing import Any
 import aiohttp
-
+from typing import Any
 from fastapi import HTTPException
 
 from src.classes.HHResumeBuilder import HHResumeBuilder
-from utils.search_areas_service import search_areas
 
 
 class HHResumeClient:
@@ -95,14 +92,20 @@ class HHResumeClient:
             last_name=student_data['student_last_name'],
             gender=student_data['student_gender']
         )
-        resume_builder.add_languages(student_data["student_english_level"])
+        resume_builder.add_languages(student_data['student_english_level'])
 
         post_body = resume_builder.build()
 
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers, json=post_body, ssl=False) as response:
+                errors_list = [403, 408, 504, 500]
                 if response.status == 201:
-                    return {"hh_id": response.headers.get("Location")}
+                    return {'hh_id': response.headers.get('Location')}
                 elif response.status == 400:
+                    errors_description = []
                     error_details = (await response.json())
-                    raise HTTPException(status_code=400, detail=error_details)
+                    for items in error_details['errors']:
+                        errors_description.append(' '.join(['Ошибка,', items['value'], items['description']]))
+                    raise HTTPException(status_code=400, detail=errors_description)
+                elif response.status in errors_list:
+                    raise HTTPException(status_code=response.status)

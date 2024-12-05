@@ -43,7 +43,7 @@ class HHResumeBuilder:
 
     def set_profession(self,
                        title: str,
-                       professional_roles: list[dict[str, str]] | None,
+                       professional_roles: list[str] | None,
                        schedules: list[dict[str, str]] | None=None,
                        travel_time: dict[str, str] | None=None) -> None:
         """
