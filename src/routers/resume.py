@@ -11,7 +11,7 @@ async def get_all_resumes():
     # return response
     pass
 
-@router.post("/resume/")
+@router.get("/resume/")
 async def post_resume(student: Student):
 
     if student.hh_access_token is not None:
