@@ -18,4 +18,4 @@ async def get_auth(request: Request):
 
 @router.get("/client_id/")
 async def get_client_id(request: Request):
-    return {"clientid": HH_CLIENT_ID}
+    return {"client_id": HH_CLIENT_ID}
