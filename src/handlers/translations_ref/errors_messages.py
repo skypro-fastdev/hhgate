@@ -32,10 +32,4 @@ errors_translations = {
     "Input should be a valid string": "Входные данные должны быть строкой",
     "Input should be a valid list": "Входные данные должны быть списком",
     "Input should be a valid integer, unable to parse string as an integer": "Входные данные должны быть целым числом, невозможно перевести строку как целое число"
-
-
-
-
-
-
 }
