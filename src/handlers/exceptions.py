@@ -4,17 +4,36 @@ from starlette.exceptions import HTTPException
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
+from src.handlers.translations_ref.errors_messages import errors_translations
+from src.handlers.translations_ref.fields import fields_translations
+
 
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     """
-    Кастомный обработчик ошибки RequestValidationError.
+    Кастомный обработчик ошибки RequestValidationError status_code 422.
     Срабатывает при передаче некорректного типа данных в поля моделей.
     """
     error_messages = []
     for error in exc.errors():
         field = error["loc"][-1]
         message = error["msg"]
-        error_messages.append(f"{field}: {message}")
+
+        translate_field = ''
+        translate_message = ''
+
+        for key, value in fields_translations.items():
+            if key == field:
+                translate_field = value
+        if not translate_field:
+            translate_field = field
+
+        for key, value in errors_translations.items():
+            if key == message:
+                translate_message = value
+        if not translate_message:
+            translate_message = message
+
+        error_messages.append(f"{translate_field}: {translate_message}")
 
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
