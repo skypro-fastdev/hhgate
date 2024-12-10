@@ -10,7 +10,7 @@ from src.handlers.translations_ref.fields import fields_translations
 
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     """
-    Кастомный обработчик ошибки RequestValidationError.
+    Кастомный обработчик ошибки RequestValidationError status_code 422.
     Срабатывает при передаче некорректного типа данных в поля моделей.
     """
     error_messages = []
