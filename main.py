@@ -5,14 +5,15 @@ from starlette.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.handlers.exceptions import validation_exception_handler, custom_http_exception_handler
-from src.routers import auth, photo, resume
-
+from src.routers import auth, photo, resume, application
 
 app = FastAPI()
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 app.include_router(auth.router)
 app.include_router(photo.router)
 app.include_router(resume.router)
+app.include_router(application.router)
+
 
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(HTTPException, custom_http_exception_handler)
