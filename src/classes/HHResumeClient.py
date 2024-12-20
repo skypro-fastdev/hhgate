@@ -16,15 +16,28 @@ class HHResumeClient:
 
     async def get_resumes(self) -> str | None:
         url = "https://api.hh.ru/resumes/mine"
+        errors_list = [403, 408, 504, 500]
         headers = self.headers
-        try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(url, headers=headers) as response:
-                    response.raise_for_status()
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, ssl=False) as response:
+                if response.status == 200:
                     content = await response.json()
                     return content
-        except Exception as e:
-            return f'Произошла ошибка\n {e}'
+                elif response.status in errors_list:
+                    raise HTTPException(status_code=response.status)
+
+    async def get_similar_vacancies(self, hh_resume_id: str) -> str:
+        url = f"https://api.hh.ru/resumes/{hh_resume_id}/similar_vacancies"
+        headers = self.headers
+        errors_list = [403, 408, 504, 500]
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, ssl=False) as response:
+                if response.status == 200:
+                    content = await response.json()
+                    return content
+                elif response.status in errors_list:
+                    raise HTTPException(status_code=response.status)
+
 
     async def post_resume(self, student_data) -> Any:
         url = 'https://api.hh.ru/resumes'

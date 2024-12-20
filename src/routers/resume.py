@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from starlette.requests import Request
 
 from src.classes.HHResumeClient import HHResumeClient
 from src.models.student import Student
@@ -6,10 +7,18 @@ from src.models.student import Student
 router = APIRouter()
 
 @router.get("/resumes/")
-async def get_all_resumes():
-    # response = await hh_res_client.get_resumes()
-    # return response
-    pass
+async def get_all_resumes(request: Request):
+    hh_access_token = request.headers['hh_access_token']
+    hh_res_client = HHResumeClient(access_token=hh_access_token)
+    response = await hh_res_client.get_resumes()
+    return response
+
+@router.get("/my_vacancies/{hh_resume_id}/")
+async def get_similar_vacancies(request: Request, hh_resume_id: str):
+    hh_access_token = request.headers['hh_access_token']
+    hh_res_client = HHResumeClient(access_token=hh_access_token)
+    response = await hh_res_client.get_similar_vacancies(hh_resume_id)
+    return response
 
 @router.post("/resume/")
 async def post_resume(student: Student):

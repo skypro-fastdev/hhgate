@@ -1,4 +1,5 @@
 import asyncio
+import os.path
 
 import aiohttp
 from async_property import async_property
@@ -33,9 +34,14 @@ class HHArtifactsClient:
                 return photo_obj
 
     async def upload_photo(self, path) -> int:
+        hh_photo_max_size = 6291456
 
         url = "https://api.hh.ru/artifacts"
         headers = await self.headers
+        split_path = path.split('.')
+        mime_type = split_path[-1]
+        valid_mime_types_list = ['jpg', 'jpeg', 'psd', 'png']
+        file_size = os.path.getsize(path)
 
         form_data = aiohttp.FormData()
         form_data.add_field('type', 'photo')
@@ -45,6 +51,15 @@ class HHArtifactsClient:
             async with session.post(url, headers=headers, data=form_data, ssl=False) as response:
 
                 logger.info(f"Sending {path} to url {url} Status {response.status}")
+
+                if file_size >= hh_photo_max_size:
+                    raise HTTPException(status_code=400, detail='Загружаемая фотография должна быть не более 6 мегабайт')
+
+                if mime_type not in valid_mime_types_list:
+                    raise HTTPException(
+                        status_code=400,
+                        detail='Загружаемая фотография должна быть формата jpeg, jpg, png или psd'
+                    )
 
                 if response.status == 201:
                     json_data = await response.json()
