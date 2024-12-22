@@ -26,6 +26,19 @@ class HHResumeClient:
                 elif response.status in errors_list:
                     raise HTTPException(status_code=response.status)
 
+    async def get_current_resume(self, hh_resume_id: str) -> str:
+        url = f"https://api.hh.ru/resumes/{hh_resume_id}"
+        errors_list = [403, 408, 504, 500]
+        headers = self.headers
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, ssl=False) as response:
+                if response.status == 200:
+                    content = await response.json()
+                    return content
+                elif response.status in errors_list:
+                    raise HTTPException(status_code=response.status)
+
+
     async def get_similar_vacancies(self, hh_resume_id: str) -> str:
         url = f"https://api.hh.ru/resumes/{hh_resume_id}/similar_vacancies"
         headers = self.headers

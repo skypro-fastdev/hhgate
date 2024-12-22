@@ -13,6 +13,13 @@ async def get_all_resumes(request: Request):
     response = await hh_res_client.get_resumes()
     return response
 
+@router.get("/resumes/{hh_resume_id}")
+async def get_resume(request: Request, hh_resume_id: str):
+    hh_access_token = request.headers['hh_access_token']
+    hh_res_client = HHResumeClient(access_token=hh_access_token)
+    response = await hh_res_client.get_current_resume(hh_resume_id)
+    return response
+
 @router.get("/my_vacancies/{hh_resume_id}/")
 async def get_similar_vacancies(request: Request, hh_resume_id: str):
     hh_access_token = request.headers['hh_access_token']
