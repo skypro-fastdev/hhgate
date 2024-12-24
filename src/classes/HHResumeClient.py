@@ -4,6 +4,8 @@ from fastapi import HTTPException
 
 from src.classes.HHResumeBuilder import HHResumeBuilder
 
+ERRORS_LIST = [403, 404, 408, 410, 504, 500]
+
 
 class HHResumeClient:
 
@@ -16,41 +18,36 @@ class HHResumeClient:
 
     async def get_resumes(self) -> str | None:
         url = "https://api.hh.ru/resumes/mine"
-        errors_list = [403, 408, 504, 500]
         headers = self.headers
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers=headers, ssl=False) as response:
                 if response.status == 200:
                     content = await response.json()
                     return content
-                elif response.status in errors_list:
+                elif response.status in ERRORS_LIST:
                     raise HTTPException(status_code=response.status)
 
     async def get_current_resume(self, hh_resume_id: str) -> str:
         url = f"https://api.hh.ru/resumes/{hh_resume_id}"
-        errors_list = [403, 408, 504, 500]
         headers = self.headers
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers=headers, ssl=False) as response:
                 if response.status == 200:
                     content = await response.json()
                     return content
-                elif response.status in errors_list:
+                elif response.status in ERRORS_LIST:
                     raise HTTPException(status_code=response.status)
-
 
     async def get_similar_vacancies(self, hh_resume_id: str) -> str:
         url = f"https://api.hh.ru/resumes/{hh_resume_id}/similar_vacancies"
         headers = self.headers
-        errors_list = [403, 408, 504, 500]
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers=headers, ssl=False) as response:
                 if response.status == 200:
                     content = await response.json()
                     return content
-                elif response.status in errors_list:
+                elif response.status in ERRORS_LIST:
                     raise HTTPException(status_code=response.status)
-
 
     async def post_resume(self, student_data) -> Any:
         url = 'https://api.hh.ru/resumes'
@@ -120,7 +117,6 @@ class HHResumeClient:
 
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers, json=post_body, ssl=False) as response:
-                errors_list = [403, 408, 504, 500]
                 if response.status == 201:
                     return {'hh_id': response.headers.get('Location')}
                 elif response.status == 400:
@@ -129,5 +125,5 @@ class HHResumeClient:
                     for items in error_details['errors']:
                         errors_description.append(' '.join(['Ошибка,', items['value'], items['description']]))
                     raise HTTPException(status_code=400, detail=errors_description)
-                elif response.status in errors_list:
+                elif response.status in ERRORS_LIST:
                     raise HTTPException(status_code=response.status)

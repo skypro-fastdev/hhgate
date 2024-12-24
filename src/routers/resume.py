@@ -3,10 +3,12 @@ from starlette.requests import Request
 
 from src.classes.HHResumeClient import HHResumeClient
 from src.models.student import Student
+from utils.decorators.check_headers_decorator import check_access_token
 
 router = APIRouter()
 
 @router.get("/resumes/")
+@check_access_token
 async def get_all_resumes(request: Request):
     hh_access_token = request.headers['hh_access_token']
     hh_res_client = HHResumeClient(access_token=hh_access_token)
@@ -14,6 +16,7 @@ async def get_all_resumes(request: Request):
     return response
 
 @router.get("/resumes/{hh_resume_id}")
+@check_access_token
 async def get_resume(request: Request, hh_resume_id: str):
     hh_access_token = request.headers['hh_access_token']
     hh_res_client = HHResumeClient(access_token=hh_access_token)
@@ -21,6 +24,7 @@ async def get_resume(request: Request, hh_resume_id: str):
     return response
 
 @router.get("/my_vacancies/{hh_resume_id}/")
+@check_access_token
 async def get_similar_vacancies(request: Request, hh_resume_id: str):
     hh_access_token = request.headers['hh_access_token']
     hh_res_client = HHResumeClient(access_token=hh_access_token)
@@ -33,7 +37,7 @@ async def post_resume(student: Student):
     if student.hh_access_token is not None:
         hh_access_token = student.hh_access_token
     else:
-        raise HTTPException(status_code=403, detail='Wrong HH code')
+        raise HTTPException(status_code=403)
 
     hh_res_client = HHResumeClient(access_token=hh_access_token)
     student_dict = student.model_dump()
