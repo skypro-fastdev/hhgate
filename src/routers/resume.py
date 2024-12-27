@@ -5,7 +5,7 @@ from src.classes.HHResumeClient import HHResumeClient
 from src.models.student import Student
 from utils.decorators.check_headers_decorator import check_access_token
 
-router = APIRouter()
+router = APIRouter(tags=['Резюме'])
 
 @router.get("/resumes/")
 @check_access_token

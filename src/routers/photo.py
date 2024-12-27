@@ -5,7 +5,7 @@ from fastapi.params import File
 
 from src.classes.HHArtifactsClient import HHArtifactsClient
 
-router = APIRouter()
+router = APIRouter(tags=['Артефакты'])
 
 
 @router.post("/photo/{student_id}")

@@ -6,7 +6,7 @@ from starlette.requests import Request
 from src.classes.HHVacanciesClient import HHVacanciesClient
 from utils.decorators.check_headers_decorator import check_access_token
 
-router = APIRouter()
+router = APIRouter(tags=['Вакансии'])
 
 @router.post("/applications/")
 @check_access_token

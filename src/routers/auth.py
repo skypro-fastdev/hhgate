@@ -3,7 +3,7 @@ from fastapi import APIRouter, Request
 from src.classes.HHAuth import HHAuth
 from src.config import HH_CLIENT_ID, HH_CLIENT_SECRET
 
-router = APIRouter()
+router = APIRouter(tags=['Аутентификация'])
 
 @router.post("/auth/")
 async def get_auth(request: Request):
