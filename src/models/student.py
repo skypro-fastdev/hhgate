@@ -1,10 +1,5 @@
 from pydantic import BaseModel, Field
 
-tags_metadata = {
-    'name': 'Создание резюме',
-    'description': 'Пример заполненной модели пользователя'
-}
-
 
 class Student(BaseModel):
     student_id: int
@@ -65,5 +60,3 @@ class Student(BaseModel):
     # checklist: str = Field(description='Чеклист с проверкой')
 
     hh_access_token: str | None = Field(default=None, examples=['USER173484RKF89F0FVBMERJK3K3IF87VG8RLOFD9VFIFRJKR'])
-
-    # TODO create birth_date validator

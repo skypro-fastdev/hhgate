@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request
 
 from src.classes.HHAuth import HHAuth
 from src.config import HH_CLIENT_ID, HH_CLIENT_SECRET
+from utils.dependencies.dependencies import get_token_header
 
 router = APIRouter(tags=['Аутентификация'])
 
