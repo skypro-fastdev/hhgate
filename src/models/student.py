@@ -1,10 +1,5 @@
 from pydantic import BaseModel, Field
 
-tags_metadata = {
-    'name': 'Создание резюме',
-    'description': 'Пример заполненной модели пользователя'
-}
-
 
 class Student(BaseModel):
     student_id: int
