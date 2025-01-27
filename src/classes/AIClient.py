@@ -1,5 +1,6 @@
 import aiohttp
 from src.config import AI_ADDRESS, AI_TOKEN
+from utils.create_prompt_to_legend import create_legend_prompt
 
 
 class AIClient:
@@ -55,6 +56,31 @@ class AIClient:
 
               Начни с самопрезентации (без указания имени)
               """
+
+        req = {
+            "model": "gpt-4",
+            "messages": [{
+                "role": "user",
+                "content": f"{prompt}"
+            }]
+        }
+
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + str(ai_token)
+        }
+
+
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url=url, json=req, ssl=False, headers=headers) as response:
+                data = await response.json()
+                return {'response': data['choices'][0]['message']['content']}
+
+    async def post_ai_legend(self, student_data):
+        url = AI_ADDRESS
+        ai_token = AI_TOKEN
+
+        prompt = create_legend_prompt(student_data)
 
         req = {
             "model": "gpt-4",
