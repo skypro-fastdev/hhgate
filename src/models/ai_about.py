@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 
 
 class AIAboutGen(BaseModel):
+
     student_id: int
     student_gender: str = Field(description='Пол студента', examples=['Мужской'])
     skill_set: list[str] = Field(description='Список навыков', examples=['Python', 'JavaScript'])
@@ -13,4 +14,4 @@ class AIAboutGen(BaseModel):
     education_organisation: str = Field(description='Название учебного заведения', examples=['Казанский гос. энергоуниверситет (КГЭУ)'])
     education_industry: str = Field(description='Факультет', examples=['Производство материалов'])
 
-    prompt: str
+    prompt: str = Field(description='Промпт, который будет обязательно использован при генерации текста', examples=['Напиши, что люблю цветочки'], default=None)

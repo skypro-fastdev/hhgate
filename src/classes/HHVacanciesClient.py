@@ -30,11 +30,11 @@ class HHVacanciesClient:
                 if response.status == 201:
                     content = await response.json(content_type='text/html')
                     return content
-                # elif response.status in ERRORS_LIST:
-                #     raise HTTPException(status_code=response.status)
-                else:
-                    content = await response.json()
-                    return content
+                elif response.status in ERRORS_LIST:
+                    raise HTTPException(status_code=response.status)
+                # else:
+                #     content = await response.json()
+                #     return content
 
 
     async def get_vacancy(self, hh_vacancy_id: str) -> str:
@@ -51,3 +51,6 @@ class HHVacanciesClient:
                     return content
                 elif response.status in ERRORS_LIST:
                     raise HTTPException(status_code=response.status)
+                # else:
+                    # content = await response.json()
+                    # return content

@@ -9,10 +9,10 @@ def create_legend_prompt(student_data: dict[str, str]) -> str:
             Создай короткое описание стажировки в качестве {student_data['previous_job_position']} от первого лица
 
             <данные>
-            Компания: ${student_data['previous_job_organisation']} 
-            Должность: ${student_data['previous_job_position']} (стажер) 
-            Индустрия: ${student_data['previous_job_industry']} 
-            Достижения: ${student_data['student_cases']}
+            Компания: {student_data['previous_job_organisation']} 
+            Должность: {student_data['previous_job_position']} (стажер) 
+            Индустрия: {student_data['previous_job_industry']} 
+            Достижения: {student_data['student_cases']}
             Навыки и технологии: ${student_data['skill_set']}
             </данные>
         
@@ -34,7 +34,7 @@ def create_legend_prompt(student_data: dict[str, str]) -> str:
               - Цифры не должны быть круглыми.
               - Обязанности и достижения должны быть тезисными, в виде списка.
               - Не выводи текст в [квдратных скобках]
-              - Используй гендер: ${student_data['student_gender']}
+              - Используй гендер: {student_data['student_gender']}
                {student_data['prompt']}
             </правила ответа> 
                 """
@@ -46,8 +46,8 @@ def create_legend_prompt(student_data: dict[str, str]) -> str:
             Создай короткое описание от первого лица трех фриланс-заказов, которые выполнил ${student_data['previous_job_position']}
     
             <данные>
-            - Компании: ${student_data['previous_job_organisation']} 
-            - Проекты: ${student_data['student_projects']}
+            - Компании: {student_data['previous_job_organisation']} 
+            - Проекты: {student_data['student_projects']}
             - Навыки и технологии: {student_data['skill_set']}
             </данные>
         
@@ -66,8 +66,8 @@ def create_legend_prompt(student_data: dict[str, str]) -> str:
               - Без введения и завершения
               - Не выводи текст в [квдратных скобках]
               - Обязанности и достижения должны быть тезисными
-              - Используй гендер ${student_data['student_gender']}
-               ${student_data['prompt']}
+              - Используй гендер {student_data['student_gender']}
+               {student_data['prompt']}
             </правила ответа> 
             """
         return prompt
@@ -77,9 +77,9 @@ def create_legend_prompt(student_data: dict[str, str]) -> str:
             Создай короткое описание от первого лица позитивного опыта работы в компании
 
             <данные>
-            - Компания: ${student_data['previous_job_organisation']}
-            - Должность: ${student_data['previous_job_position']} 
-            - Индустрия: ${student_data['previous_job_industry']} 
+            - Компания: {student_data['previous_job_organisation']}
+            - Должность: {student_data['previous_job_position']} 
+            - Индустрия: {student_data['previous_job_industry']} 
         
             - Навыки и технологии: ${student_data['skill_set']} (выбери 4-5)
         
@@ -104,8 +104,8 @@ def create_legend_prompt(student_data: dict[str, str]) -> str:
               - Цифры не должны зкаанчиваться на "0"         
               - Не выводи текст в [квадратных скобках]
               
-              - Используй гендер ${student_data['student_gender']}
-               ${student_data['prompt']}
+              - Используй гендер {student_data['student_gender']}
+               {student_data['prompt']}
             </правила ответа> 
         """
         return prompt
