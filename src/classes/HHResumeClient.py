@@ -38,6 +38,7 @@ class HHResumeClient:
                 elif response.status in ERRORS_LIST:
                     raise HTTPException(status_code=response.status)
 
+
     async def get_similar_vacancies(self, hh_resume_id: str) -> str:
         url = f"https://api.hh.ru/resumes/{hh_resume_id}/similar_vacancies"
         headers = self.headers

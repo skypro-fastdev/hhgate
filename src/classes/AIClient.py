@@ -1,13 +1,15 @@
 import aiohttp
 from src.config import AI_ADDRESS, AI_TOKEN
-from utils.create_prompt_to_legend import create_legend_prompt
+from utils.create_prompt_to_ai_legend import create_legend_prompt
 
 
 class AIClient:
 
+    def __init__(self):
+        self.url = AI_ADDRESS
+        self.ai_token = AI_TOKEN
+
     async def post_ai_about(self, student_data):
-        url = AI_ADDRESS
-        ai_token = AI_TOKEN
 
         prompt = f"""  
               Напиши текст о себе для профессионального резюме, не указывая опыт и грейд. 
@@ -67,18 +69,16 @@ class AIClient:
 
         headers = {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + str(ai_token)
+            "Authorization": "Bearer " + str(self.ai_token)
         }
 
 
         async with aiohttp.ClientSession() as session:
-            async with session.post(url=url, json=req, ssl=False, headers=headers) as response:
+            async with session.post(url=self.url, json=req, ssl=False, headers=headers) as response:
                 data = await response.json()
                 return {'response': data['choices'][0]['message']['content']}
 
     async def post_ai_legend(self, student_data):
-        url = AI_ADDRESS
-        ai_token = AI_TOKEN
 
         prompt = create_legend_prompt(student_data)
 
@@ -92,11 +92,60 @@ class AIClient:
 
         headers = {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + str(ai_token)
+            "Authorization": "Bearer " + str(self.ai_token)
         }
 
 
         async with aiohttp.ClientSession() as session:
-            async with session.post(url=url, json=req, ssl=False, headers=headers) as response:
+            async with session.post(url=self.url, json=req, ssl=False, headers=headers) as response:
+                data = await response.json()
+                return {'response': data['choices'][0]['message']['content']}
+
+    async def post_ai_experience(self, student_data):
+
+        prompt = f"""
+            Создай короткое описание от первого лица позитивного опыта работы в компании
+
+            <данные>
+            Компания: {student_data['previous_job_organisation']} 
+            Должность: {student_data['previous_job_position']} 
+            Индустрия: {student_data['previous_job_industry']} 
+            Длительность работы: 1 год назад 
+            </данные>
+            
+            <Шаблон ответа>
+            
+            (Основные обязанности и достижения)  
+            (Какие технологии использовались) 
+            
+            </пример ответа>   
+            
+            <правила ответа>
+              - Цифры не должны быть круглыми
+              - Ответ полностью на русском языке
+              - Тезисно и по пунктам
+              - Без введения и завершения
+              - К достижениям добавь цифры (рост  2-5 показателей от 5 до 32 процентов, 500 символов)
+              - Обязаннсти и достижения должны быть тезисными
+              - Используй гендер {student_data['student_gender']}
+              {student_data['prompt']}
+            </правила ответа>  
+        """
+
+        req = {
+            "model": "gpt-4",
+            "messages": [{
+                "role": "user",
+                "content": f"{prompt}"
+            }]
+        }
+
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + str(self.ai_token)
+        }
+
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url=self.url, json=req, ssl=False, headers=headers) as response:
                 data = await response.json()
                 return {'response': data['choices'][0]['message']['content']}
