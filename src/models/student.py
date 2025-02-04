@@ -27,8 +27,8 @@ class Student(BaseModel):
     recent_job_organisation: str = Field(description='Название', examples=['AlmostGgle'])
     recent_job_position: str = Field(description='Должность', examples=['Аналитик данных'])
     recent_job_industry: str = Field(description='Индустрия', examples=['Информационные технологии'])
-    recent_job_from: str = Field(description='Дата начала работы', examples=['2022'])
-    recent_job_to: str = Field(description='Дата завершения работы', examples=[''])
+    recent_job_from: str = Field(description='Дата начала работы', examples=['2022-01-01'])
+    recent_job_to: str = Field(description='Дата завершения работы', examples=['2022-10-10'])
     recent_job_experience: str = Field(description='Достижения', examples=['Самый первый сдаю работу'])
     recent_job_prompt: str = Field(description='Промпт', examples=['Промпт'])
 
@@ -36,8 +36,8 @@ class Student(BaseModel):
     previous_job_organisation: str = Field(description='Название', examples=['CompService'])
     previous_job_position: str = Field(description='Должность', examples=['Младший ремонтник'])
     previous_job_industry: str = Field(description='Индустрия', examples=['Сервис'])
-    previous_job_from: str = Field(description='Дата начала работы', examples=['2020'])
-    previous_job_to: str = Field(description='Дата завершения работы', examples=['2022'])
+    previous_job_from: str = Field(description='Дата начала работы', examples=['2020-01-01'])
+    previous_job_to: str = Field(description='Дата завершения работы', examples=['2022-01-01'])
     previous_job_experience: str = Field(description='Достижения', examples=['Починил кучу техники'])
     previous_job_prompt: str = Field(description='Промпт', examples=['Промпт'])
 

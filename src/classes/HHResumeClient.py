@@ -128,3 +128,5 @@ class HHResumeClient:
                     raise HTTPException(status_code=400, detail=errors_description)
                 elif response.status in ERRORS_LIST:
                     raise HTTPException(status_code=response.status)
+                # else:
+                #     return response
