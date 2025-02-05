@@ -28,7 +28,7 @@ class HHVacanciesClient:
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers, data=form_data, ssl=False) as response:
                 if response.status == 201:
-                    content = await response.json(content_type='text/html')
+                    content = await response.json()
                     return content
                 elif response.status in ERRORS_LIST:
                     raise HTTPException(status_code=response.status)
