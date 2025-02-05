@@ -8,7 +8,7 @@ class AILegendGen(BaseModel):
     student_gender: str = Field(description='Пол студента', examples=['Мужской'])
     skill_set: list[str] = Field(description='Список навыков', examples=[['Python', 'JavaScript']])
 
-    previous_job_organisation: str = Field(description='Организация', examples=['SkyPro'])
+    previous_job_organisation: str | list = Field(description='Организаци(и/я)', examples=[['SkyPro', 'Skyeng', 'MIT']])
     previous_job_position: str = Field(description='Предыдущая специальность', examples=['Веб разработчик'])
 
     student_projects: list = Field(description='Проекты студента', examples=[['Дешифровальная машина', 'Зверенаклонитель', 'Стабилизатор стресса']], default=None)
