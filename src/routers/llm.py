@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-from starlette.requests import Request
 
 from src.classes.AIClient import AIClient
 from src.models.ai_about import AIAboutGen

@@ -16,25 +16,26 @@ class HHVacanciesClient:
     async def headers(self) -> dict[str, str]:
         return {"Authorization": f"Bearer {self.access_token}"}
 
-    async def post_application(self, message, resume_id, vacancy_id) -> Any:
+    async def post_application(self, data) -> Any:
         url = 'https://api.hh.ru/negotiations'
         headers = await self.headers
 
+
         form_data = aiohttp.FormData()
-        form_data.add_field(name='message', value=message)
-        form_data.add_field(name='resume_id', value=resume_id)
-        form_data.add_field(name='vacancy_id', value=vacancy_id)
+        form_data.add_field(name='message', value=data['message'])
+        form_data.add_field(name='resume_id', value=data['resume_id'])
+        form_data.add_field(name='vacancy_id', value=data['vacancy_id'])
 
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers, data=form_data, ssl=False) as response:
                 if response.status == 201:
+                    content = await response.json(content_type='text/html')
+                    return content
+                # elif response.status in ERRORS_LIST:
+                #     raise HTTPException(status_code=response.status)
+                else:
                     content = await response.json()
                     return content
-                elif response.status in ERRORS_LIST:
-                    raise HTTPException(status_code=response.status)
-                # else:
-                #     content = await response.json()
-                #     return content
 
 
     async def get_vacancy(self, hh_vacancy_id: str) -> str:

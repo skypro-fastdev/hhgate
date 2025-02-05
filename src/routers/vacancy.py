@@ -10,10 +10,11 @@ router = APIRouter(tags=['Вакансии'])
 
 @router.post("/applications/")
 @check_access_token
-async def post_application(request: Request, message: Annotated[str, Form()], resume_id: Annotated[str, Form()], vacancy_id: Annotated[str, Form()]):
+async def post_application(request: Request):
     hh_access_token = request.headers['hh_access_token']
     hh_app_client = HHVacanciesClient(access_token=hh_access_token)
-    response = await hh_app_client.post_application(message, resume_id, vacancy_id)
+    data = await request.json()
+    response = await hh_app_client.post_application(data)
     return response
 
 @router.get("/vacancies/{hh_vacancy_id}/")
