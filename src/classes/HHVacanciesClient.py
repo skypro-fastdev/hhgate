@@ -4,13 +4,14 @@ from typing import Any
 from async_property import async_property
 from fastapi import HTTPException
 
-ERRORS_LIST = [403, 404, 408, 410, 504, 500]
+from src.config import ERROR_HANDLER_LIST
 
 
 class HHVacanciesClient:
 
     def __init__(self, access_token: str) -> None:
         self.access_token = access_token
+        self.error_list = ERROR_HANDLER_LIST
 
     @async_property
     async def headers(self) -> dict[str, str]:
@@ -31,7 +32,7 @@ class HHVacanciesClient:
                 if response.status == 201:
                     content = await response.json(content_type='text/html')
                     return content
-                # elif response.status in ERRORS_LIST:
+                # elif response.status in self.error_list:
                 #     raise HTTPException(status_code=response.status)
                 else:
                     content = await response.json()
@@ -50,7 +51,7 @@ class HHVacanciesClient:
                 if response.status == 200:
                     content = await response.json()
                     return content
-                elif response.status in ERRORS_LIST:
+                elif response.status in self.error_list:
                     raise HTTPException(status_code=response.status)
                 # else:
                     # content = await response.json()
