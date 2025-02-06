@@ -3,14 +3,14 @@ from typing import Any
 from fastapi import HTTPException
 
 from src.classes.HHResumeBuilder import HHResumeBuilder
-
-ERRORS_LIST = [403, 404, 408, 410, 504, 500]
+from src.config import ERROR_HANDLER_LIST
 
 
 class HHResumeClient:
 
     def __init__(self, access_token: str) -> None:
         self.access_token = access_token
+        self.error_list = ERROR_HANDLER_LIST
 
     @property
     def headers(self) -> dict[str, str]:
@@ -24,7 +24,7 @@ class HHResumeClient:
                 if response.status == 200:
                     content = await response.json()
                     return content
-                elif response.status in ERRORS_LIST:
+                elif response.status in self.error_list:
                     raise HTTPException(status_code=response.status)
 
     async def get_current_resume(self, hh_resume_id: str) -> str:
@@ -35,7 +35,7 @@ class HHResumeClient:
                 if response.status == 200:
                     content = await response.json()
                     return content
-                elif response.status in ERRORS_LIST:
+                elif response.status in self.error_list:
                     raise HTTPException(status_code=response.status)
 
 
@@ -47,7 +47,7 @@ class HHResumeClient:
                 if response.status == 200:
                     content = await response.json()
                     return content
-                elif response.status in ERRORS_LIST:
+                elif response.status in self.error_list:
                     raise HTTPException(status_code=response.status)
 
     async def post_resume(self, student_data) -> Any:
@@ -126,7 +126,7 @@ class HHResumeClient:
                     for items in error_details['errors']:
                         errors_description.append(' '.join(['Ошибка,', items['value'], items['description']]))
                     raise HTTPException(status_code=400, detail=errors_description)
-                elif response.status in ERRORS_LIST:
+                elif response.status in self.error_list:
                     raise HTTPException(status_code=response.status)
                 # else:
                 #     return response

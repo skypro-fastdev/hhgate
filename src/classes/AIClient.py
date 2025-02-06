@@ -1,5 +1,7 @@
 import aiohttp
-from src.config import AI_ADDRESS, AI_TOKEN
+from fastapi import HTTPException
+
+from src.config import AI_ADDRESS, AI_TOKEN, ERROR_HANDLER_LIST
 from utils.create_prompt_to_ai_legend import create_legend_prompt
 
 
@@ -8,6 +10,7 @@ class AIClient:
     def __init__(self):
         self.url = AI_ADDRESS
         self.ai_token = AI_TOKEN
+        self.error_list = ERROR_HANDLER_LIST
 
     async def post_ai_about(self, student_data):
 
@@ -75,8 +78,12 @@ class AIClient:
 
         async with aiohttp.ClientSession() as session:
             async with session.post(url=self.url, json=req, ssl=False, headers=headers) as response:
-                data = await response.json()
-                return {'response': data['choices'][0]['message']['content']}
+                if response.status == 200:
+                    content = await response.json()
+                    return {'response': content['choices'][0]['message']['content']}
+                elif response.status in self.error_list:
+                    raise HTTPException(status_code=response.status)
+
 
     async def post_ai_legend(self, student_data):
 
@@ -98,8 +105,11 @@ class AIClient:
 
         async with aiohttp.ClientSession() as session:
             async with session.post(url=self.url, json=req, ssl=False, headers=headers) as response:
-                data = await response.json()
-                return {'response': data['choices'][0]['message']['content']}
+                if response.status == 200:
+                    content = await response.json()
+                    return {'response': content['choices'][0]['message']['content']}
+                elif response.status in self.error_list:
+                    raise HTTPException(status_code=response.status)
 
     async def post_ai_experience(self, student_data):
 
@@ -147,5 +157,8 @@ class AIClient:
 
         async with aiohttp.ClientSession() as session:
             async with session.post(url=self.url, json=req, ssl=False, headers=headers) as response:
-                data = await response.json()
-                return {'response': data['choices'][0]['message']['content']}
+                if response.status == 200:
+                    content = await response.json()
+                    return {'response': content['choices'][0]['message']['content']}
+                elif response.status in self.error_list:
+                    raise HTTPException(status_code=response.status)
