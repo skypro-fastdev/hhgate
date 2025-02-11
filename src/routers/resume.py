@@ -4,7 +4,6 @@ from starlette.requests import Request
 from src.classes.HHResumeClient import HHResumeClient
 from src.models.student import Student
 from utils.decorators.check_headers_decorator import check_access_token
-from utils.dependencies.dependencies import get_token_header
 
 router = APIRouter(tags=['Резюме'])
 
