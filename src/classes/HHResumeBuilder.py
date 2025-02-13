@@ -210,9 +210,12 @@ class HHResumeBuilder:
         if business_trip_readiness is None:
             business_trip_readiness = {"id": "never"}
 
-        self.body_fields["area"] = {"id": search_areas(area)}
-        if not self.body_fields["area"]:
+        student_area = search_areas(area)
+        if student_area:
+            self.body_fields["area"] = {"id": student_area}
+        else:
             self.body_fields["area"] = {"id": 1}
+
         self.body_fields["citizenship"] = citizenship
         self.body_fields["work_ticket"] = work_ticket
         self.body_fields["relocation"] = relocation
