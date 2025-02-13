@@ -122,7 +122,7 @@ class HHResumeClient:
                     return {'hh_id': response.headers.get('Location')}
                 elif response.status == 400:
                     errors_description = []
-                    error_details = (await response.json())
+                    error_details = await response.json()
                     for items in error_details['errors']:
                         errors_description.append(' '.join(['Ошибка,', items['value'], items['description']]))
                     raise HTTPException(status_code=400, detail=errors_description)

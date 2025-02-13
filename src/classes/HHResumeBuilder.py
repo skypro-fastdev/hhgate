@@ -211,12 +211,14 @@ class HHResumeBuilder:
             business_trip_readiness = {"id": "never"}
 
         self.body_fields["area"] = {"id": search_areas(area)}
+        if not self.body_fields["area"]:
+            self.body_fields["area"] = {"id": 1}
         self.body_fields["citizenship"] = citizenship
         self.body_fields["work_ticket"] = work_ticket
         self.body_fields["relocation"] = relocation
         self.body_fields["business_trip_readiness"] = business_trip_readiness
 
-    def set_personal_data(self, birth_date:str, first_name:str, last_name:str, gender:str) -> None:
+    def set_personal_data(self, birth_date:str, first_name:str, last_name:str, gender:str='male') -> None:
         """
         Добавляет поля:
             - Дата рождения
