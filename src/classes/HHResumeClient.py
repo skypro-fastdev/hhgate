@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import aiohttp
 from typing import Any
 from fastapi import HTTPException
@@ -115,6 +117,7 @@ class HHResumeClient:
         resume_builder.add_languages(student_data['student_english_level'])
 
         post_body = resume_builder.build()
+        pprint(post_body)
 
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers, json=post_body, ssl=False) as response:

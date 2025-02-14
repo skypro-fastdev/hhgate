@@ -91,7 +91,7 @@ class HHResumeBuilder:
                     "year": education['education_to']
                 }],
                 "level": search_education_level(education["education_level"]),
-                "primary": None
+                "primary": [],
             }
 
         elif education["education_level"].lower() in higher_education_list:
