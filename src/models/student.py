@@ -41,22 +41,22 @@ class Student(BaseModel):
     previous_job_experience: str = Field(description='Достижения', examples=['Починил кучу техники'])
     previous_job_prompt: str = Field(description='Промпт', examples=['Промпт'])
 
-    education_organisation: str = Field(description='Название учебного заведения', examples=['Московский физтех институт'])
-    education_from: str = Field(description='Год начала обучения', examples=['2015'])
-    education_to: str = Field(description='Год конца обучения', examples=['2020'])
-    education_industry: str = Field(description='Отрасль / Специальность', examples=['Инженер'])
-    education_level: str = Field(description='Уровень образования', examples=['higher'])
+    hh_portfolio_id: str = Field(description='ID портфолио на HH', examples=['k34is345dop3950fkd93pwdif903elkc9f'])
+
+    hh_code: str = Field(description='Токен HH', examples=['UED57880JHG4212KLDFKGK2JH5KJHKJFLHKDJJKVCLKJHGLHJKEWOI4090943832IOP2'])
+    hh_access_token: str | None = Field(default=None, examples=['USER173484RKF89F0FVBMERJK3K3IF87VG8RLOFD9VFIFRJKR'])
+    hh_photo_id: str | None = Field(description='ID фото на HH', default=None, examples=['123'])
+
+    education_faculty: str = Field(description='Факультет', examples=['Физико-технологический'], default=None)
+    education_organisation: str = Field(description='Название учебного заведения', examples=['Московский физтех институт'], default=None)
+    education_from: str = Field(description='Год начала обучения', examples=['2015'], default=None)
+    education_to: str = Field(description='Год конца обучения', examples=['2020'], default=None)
+    education_industry: str = Field(description='Отрасль / Специальность', examples=['Инженер'], default=None)
+    education_level: str = Field(description='Уровень образования', examples=['higher'], default=None)
 
     # photo: str = Field(description='Фото')
-
-    # hh_id: str = Field(description='id пользователя на HH')
-    hh_code: str = Field(description='Токен HH', examples=['UED57880JHG4212KLDFKGK2JH5KJHKJFLHKDJJKVCLKJHGLHJKEWOI4090943832IOP2'])
-    hh_portfolio_id: str = Field(description='ID портфолио на HH', examples=['k34is345dop3950fkd93pwdif903elkc9f'])
-    hh_photo_id: str | None = Field(description='ID фото на HH', default=None, examples=['123'])
-    education_faculty: str = Field(description='Факультет', default=None, examples=['Физико-технологический'])
     # hh_vacancy_url: str = Field(description='URL вакансии')
     # hh_vacancy_id: str = Field(description='ID вакансии')
-
+    # hh_id: str = Field(description='id пользователя на HH')
     # checklist: str = Field(description='Чеклист с проверкой')
 
-    hh_access_token: str | None = Field(default=None, examples=['USER173484RKF89F0FVBMERJK3K3IF87VG8RLOFD9VFIFRJKR'])
