@@ -48,11 +48,11 @@ class Student(BaseModel):
     hh_photo_id: str | None = Field(description='ID фото на HH', default=None, examples=['123'])
 
     education_faculty: str = Field(description='Факультет', examples=['Физико-технологический'], default=None)
-    education_organisation: str = Field(description='Название учебного заведения', examples=['Московский физтех институт'], default=None)
-    education_from: str = Field(description='Год начала обучения', examples=['2015'], default=None)
-    education_to: str = Field(description='Год конца обучения', examples=['2020'], default=None)
-    education_industry: str = Field(description='Отрасль / Специальность', examples=['Инженер'], default=None)
-    education_level: str = Field(description='Уровень образования', examples=['higher'], default=None)
+    education_organisation: str = Field(description='Название учебного заведения', examples=['Московский физтех институт'])
+    education_from: str = Field(description='Год начала обучения', examples=['2015'])
+    education_to: str = Field(description='Год конца обучения', examples=['2020'])
+    education_industry: str = Field(description='Отрасль / Специальность', examples=['Инженер'])
+    education_level: str = Field(description='Уровень образования', examples=['higher'])
 
     # photo: str = Field(description='Фото')
     # hh_vacancy_url: str = Field(description='URL вакансии')
