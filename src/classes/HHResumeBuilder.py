@@ -91,7 +91,7 @@ class HHResumeBuilder:
                     "year": education['education_to']
                 }],
                 "level": search_education_level(education["education_level"]),
-                "primary": None
+                "primary": [],
             }
 
         elif education["education_level"].lower() in higher_education_list:
@@ -210,13 +210,18 @@ class HHResumeBuilder:
         if business_trip_readiness is None:
             business_trip_readiness = {"id": "never"}
 
-        self.body_fields["area"] = {"id": search_areas(area)}
+        student_area = search_areas(area)
+        if student_area:
+            self.body_fields["area"] = {"id": student_area}
+        else:
+            self.body_fields["area"] = {"id": 1}
+
         self.body_fields["citizenship"] = citizenship
         self.body_fields["work_ticket"] = work_ticket
         self.body_fields["relocation"] = relocation
         self.body_fields["business_trip_readiness"] = business_trip_readiness
 
-    def set_personal_data(self, birth_date:str, first_name:str, last_name:str, gender:str) -> None:
+    def set_personal_data(self, birth_date:str, first_name:str, last_name:str, gender:str='male') -> None:
         """
         Добавляет поля:
             - Дата рождения

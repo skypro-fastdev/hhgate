@@ -6,9 +6,9 @@ def search_areas(user_area: str) -> str:
 
     for elem in areas_list:
         for area in elem['areas']:
-            if area['name'].lower() == user_area.lower():
+            if user_area.lower() in area['name'].lower():
                 return area['id']
             else:
                 for city in area['areas']:
-                    if city['name'].lower() == user_area.lower():
+                    if user_area.lower() in city['name'].lower():
                         return city['id']
