@@ -125,6 +125,7 @@ class HHResumeClient:
                     error_details = await response.json()
                     for items in error_details['errors']:
                         errors_description.append(' '.join(['Ошибка,', items['value'], items['description']]))
+                        print(error_details)
                     raise HTTPException(status_code=400, detail=errors_description)
                 elif response.status in self.error_list:
                     raise HTTPException(status_code=response.status)
