@@ -69,6 +69,8 @@ class HHResumeClient:
             'education_faculty': student_data['education_faculty'],
             'education_industry': student_data['education_industry']
         })
+
+
         if student_data['previous_job_position']:
             resume_builder.add_experience(experience=
             {
@@ -78,7 +80,8 @@ class HHResumeClient:
                 'job_from': student_data['previous_job_from'],
                 'job_to': student_data['previous_job_to']
             })
-        if student_data['recent_job_position']:
+
+        if student_data['legend_on']:
             resume_builder.add_experience(experience=
             {
                 'organisation': student_data['recent_job_organisation'],
@@ -87,6 +90,7 @@ class HHResumeClient:
                 'job_from': student_data['recent_job_from'],
                 'job_to': student_data['recent_job_to']
             })
+
         if student_data['student_mail']:
             resume_builder.add_contact(contact=
             {

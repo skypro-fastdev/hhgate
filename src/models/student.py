@@ -54,9 +54,6 @@ class Student(BaseModel):
     education_industry: str = Field(description='Отрасль / Специальность', examples=['Инженер'])
     education_level: str = Field(description='Уровень образования', examples=['higher'])
 
-    # photo: str = Field(description='Фото')
-    # hh_vacancy_url: str = Field(description='URL вакансии')
-    # hh_vacancy_id: str = Field(description='ID вакансии')
-    # hh_id: str = Field(description='id пользователя на HH')
-    # checklist: str = Field(description='Чеклист с проверкой')
+    legend_on: bool = Field(description='Включена ли легенда')
+
 
