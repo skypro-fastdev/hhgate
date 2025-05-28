@@ -3,18 +3,16 @@ from fastapi import HTTPException
 
 
 class HHAuth:
-    def __init__(self, client_id, client_secret, auth_code, user_agent):
+    def __init__(self, client_id, client_secret, auth_code):
         self.client_id = client_id
         self.client_secret = client_secret
         self.auth_code = auth_code
-        self.user_agent = user_agent
 
     def connect(self):
         headers = {
-            "User-Agent": self.user_agent,
-            "Content-Type": "application/x-www-form-urlencoded"  # Changed content type
+            "Content-Type": "application/x-www-form-urlencoded" 
         }
-        # Changed from json to data for form-urlencoded
+       
         data = {
             "grant_type": "authorization_code",
             "client_id": self.client_id,
